@@ -10,6 +10,7 @@ metadata:
 spec:
   finalizers:
   - kubernetes
+
 ---
 apiVersion: operators.coreos.com/v1alpha1
 kind: Subscription
