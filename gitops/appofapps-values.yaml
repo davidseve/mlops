@@ -7,10 +7,12 @@ default:
     labels:
       app-source: base
       repo: cluster-config
-    destination:
+    destination:   
       namespace: openshift-gitops
       server: https://kubernetes.default.svc
-
+    source:       
+      repoURL: 'https://github.com/davidseve/mlops.git'
+      targetRevision: HEAD      
 projects:
   cluster-config:
     annotations:
