@@ -28,7 +28,7 @@ applications:
   argocd:
     project: cluster-config
     annotations:
-      argocd.argoproj.io/sync-wave: '19'
+      argocd.argoproj.io/sync-wave: '15'
     source:
       path: common/argocd
     destination:
@@ -52,6 +52,32 @@ applications:
     destination:
       namespace: openshift-operators      
 
+  service-mesh:
+    project: cluster-config
+    annotations:
+      argocd.argoproj.io/sync-wave: '20'
+    source:
+      path: common/service-mesh
+    destination:
+      namespace: openshift-operators  
+
+  serverless:
+    project: cluster-config
+    annotations:
+      argocd.argoproj.io/sync-wave: '20'
+    source:
+      path: common/service-mesh
+    destination:
+      namespace: openshift-serverless
+
+  ods:
+    project: cluster-config
+    annotations:
+      argocd.argoproj.io/sync-wave: '25'
+    source:
+      path: common/service-mesh
+    destination:
+      namespace: redhat-ods-operator  
   # rbac:
   #   project: cluster-config
   #   annotations:
