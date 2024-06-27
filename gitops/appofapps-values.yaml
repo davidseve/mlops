@@ -1,0 +1,102 @@
+default:
+  app:
+    enabled: true
+    enableAutoSync: true
+    autoSyncPrune: false
+    project: cluster-config
+    labels:
+      app-source: base
+      repo: cluster-config
+    destination:
+      namespace: openshift-gitops
+      server: https://kubernetes.default.svc
+
+projects:
+  cluster-config:
+    annotations:
+      notifications.argoproj.io/subscribe.on-sync-failed.slack: cluster-gitops
+      notifications.argoproj.io/subscribe.on-health-degraded.slack: cluster-gitops
+    description: Project for overall cluster configuration
+    namespace: openshift-gitops
+    destinations: |
+      - namespace: '*'
+        server: https://kubernetes.default.svc
+
+applications:
+  argocd:
+    project: cluster-config
+    annotations:
+      argocd.argoproj.io/sync-wave: '19'
+    source:
+      path: common/argocd
+    destination:
+      namespace: openshift-gitops 
+
+  minio:
+    project: cluster-config
+    annotations:
+      argocd.argoproj.io/sync-wave: '20'
+    source:
+      path: common/minio
+    destination:
+      namespace: minio     
+
+  pipelines:
+    project: cluster-config
+    annotations:
+      argocd.argoproj.io/sync-wave: '20'
+    source:
+      path: common/pipelines
+    destination:
+      namespace: openshift-operators      
+
+  # rbac:
+  #   project: cluster-config
+  #   annotations:
+  #     argocd.argoproj.io/sync-wave: '10'
+  #   source:
+  #     path: common/rbac/base
+
+  # sealed-secrets:
+  #   project: cluster-config
+  #   annotations:
+  #     argocd.argoproj.io/sync-wave: '10'
+  #   source:
+  #     path: common/sealed-secrets/base
+  # postgresdb:
+  #   project: cluster-config
+  #   annotations:
+  #     argocd.argoproj.io/sync-wave: '20'
+  #   source:
+  #     path: common/postgresdb/base
+
+  # nfd:
+  #   project: cluster-config
+  #   annotations:
+  #     argocd.argoproj.io/sync-wave: '20'
+  #   source:
+  #     path: common/nfd/base
+
+  # nvidia-gpu-operator:
+  #   project: cluster-config
+  #   annotations:
+  #     argocd.argoproj.io/sync-wave: '20'
+  #   source:
+  #     path: common/nvidia-gpu/base
+
+  # rhods:
+  #   project: cluster-config
+  #   annotations:
+  #     argocd.argoproj.io/sync-wave: '20'
+  #   source:
+  #     path: common/rhods/base
+
+  # custom-notebooks:
+  #   project: cluster-config
+  #   annotations:
+  #     argocd.argoproj.io/sync-wave: '20'
+  #   source:
+  #     repoURL: http://tfsmaster:8080/tfs/DefaultCollection/MLOps/_git/rhoai-custom-notebook-images
+  #     targetRevision: second
+  #     path: manifests/base
+
