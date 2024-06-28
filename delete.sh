@@ -17,7 +17,7 @@ oc delete -f gitops/appofapp-char.yaml
 oc delete application argocd -n openshift-gitops
 oc delete application -n openshift-gitops minio
 oc delete application -n openshift-gitops pipelines
-oc delete application -n openshift-gitops rhods
+oc delete application -n openshift-gitops ods
 oc delete application -n openshift-gitops serverless
 oc delete application -n openshift-gitops service-mesh
 sleep 30

@@ -72,7 +72,7 @@ applications:
     annotations:
       argocd.argoproj.io/sync-wave: '20'
     source:
-      path: gitops/common/service-mesh
+      path: gitops/common/servicerless
     destination:
       namespace: openshift-serverless
 
