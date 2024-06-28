@@ -24,7 +24,11 @@ projects:
       - namespace: '*'
         server: https://kubernetes.default.svc
     sourceRepos:
-    - https://github.com/davidseve/mlops.git       
+      - https://github.com/davidseve/mlops.git  
+    extraFields: |
+      clusterResourceWhitelist:
+      - group: '*'
+        kind: '*'           
 
 applications:
   argocd:
