@@ -7,6 +7,7 @@ delete_subscription(){
   oc delete namespace $namespace
 }
 
+# TODO borrar instancia Argo CD
 set -x
 PATH=${PWD}/bin/:$PATH
 

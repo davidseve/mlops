@@ -11,7 +11,7 @@ PATH=${PWD}/bin/:$PATH
 
 # install openshift-gitops operator resources
 oc get argocd -n openshift-gitops openshift-gitops &>/dev/null
-if [[ $? -eq 1 ]]; then
+if [[ 1 -eq 1 ]]; then
   echo "ArgoCD instance not detected. Installing operator."
 
   # cleanup existing installplans

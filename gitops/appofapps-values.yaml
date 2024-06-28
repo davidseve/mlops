@@ -31,15 +31,6 @@ projects:
         kind: '*'           
 
 applications:
-  argocd:
-    project: cluster-config
-    annotations:
-      argocd.argoproj.io/sync-wave: '15'
-    source:
-      path: gitops/common/argocd
-    destination:
-      namespace: openshift-gitops 
-
   minio:
     project: cluster-config
     annotations:
