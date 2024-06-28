@@ -2,8 +2,6 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  annotations:
-    argocd.argoproj.io/sync-wave: "0"
   name: istio-system
   labels:
      argocd.argoproj.io/managed-by: openshift-gitops
@@ -15,8 +13,6 @@ spec:
 apiVersion: operators.coreos.com/v1alpha1
 kind: Subscription
 metadata:
-  annotations:
-    argocd.argoproj.io/sync-wave: "13"
   name: servicemeshoperator
   namespace: openshift-operators
 spec:

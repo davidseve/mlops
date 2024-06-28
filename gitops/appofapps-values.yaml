@@ -39,7 +39,7 @@ applications:
       path: gitops/common/argocd
     destination:
       namespace: openshift-gitops
-      
+
   minio:
     project: cluster-config
     annotations:
@@ -84,6 +84,7 @@ applications:
       path: gitops/common/ods
     destination:
       namespace: redhat-ods-operator  
+      
   # rbac:
   #   project: cluster-config
   #   annotations:

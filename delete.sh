@@ -21,7 +21,6 @@ oc delete application -n openshift-gitops pipelines
 oc delete application -n openshift-gitops ods
 oc delete application -n openshift-gitops serverless
 oc delete application -n openshift-gitops service-mesh
-sleep 30
 
 #pipelines deletion
 namespace=openshift-operators
