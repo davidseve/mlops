@@ -15,12 +15,12 @@ oc project openshift-gitops
 
 # delete resources
 oc delete -f gitops/appofapp-char.yaml
-oc delete application argocd -n openshift-gitops
 oc delete application -n openshift-gitops minio
 oc delete application -n openshift-gitops pipelines
 oc delete application -n openshift-gitops ods
 oc delete application -n openshift-gitops serverless
 oc delete application -n openshift-gitops service-mesh
+oc delete application argocd -n openshift-gitops
 
 #pipelines deletion
 namespace=openshift-operators
@@ -74,5 +74,6 @@ if [[ ${1:-1} = "1" ]]; then
   oc delete -f bootstrap/argocd-installation.yaml
   oc delete subscription openshift-gitops-operator -n openshift-gitops-operator
   oc delete clusterserviceversion $currentCSV  -n openshift-gitops-operator
+  oc -n openshift-gitops-operator delete installplan --all
   oc delete namespace openshift-gitops
 fi
