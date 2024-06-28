@@ -20,6 +20,7 @@ if [[ $? -eq 1 ]]; then
   # create resources
   oc apply -f bootstrap/argocd-installation.yaml
   # approve new installplan
+  sleep 1m
   waitoperatorpod gitops
   installPlan=$(oc -n openshift-gitops-operator get subscriptions.operators.coreos.com -o jsonpath='{.items[0].status.installPlanRef.name}')
   oc -n openshift-gitops-operator patch installplan "${installPlan}" --type=json -p='[{"op":"replace","path": "/spec/approved", "value": true}]'

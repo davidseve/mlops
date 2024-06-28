@@ -14,6 +14,13 @@ oc project openshift-gitops
 
 # delete resources
 oc delete -f gitops/appofapp-char.yaml
+oc delete application argocd -n openshift-gitops
+oc delete application -n openshift-gitops minio
+oc delete application -n openshift-gitops pipelines
+oc delete application -n openshift-gitops rhods
+oc delete application -n openshift-gitops serverless
+oc delete application -n openshift-gitops service-mesh
+sleep 30
 
 #pipelines deletion
 namespace=openshift-operators
@@ -48,7 +55,7 @@ oc label configmap/delete-self-managed-odh api.openshift.com/addon-managed-odh-d
 PROJECT_NAME=redhat-ods-applications
 while oc get project $PROJECT_NAME &> /dev/null; do
   echo "The $PROJECT_NAME project still exists"
-  sleep 1
+  sleep 2
 done
 echo "The $PROJECT_NAME project no longer exists"
 oc delete namespace redhat-ods-operator
@@ -56,11 +63,9 @@ oc delete namespace redhat-ods-applications
 oc delete namespace redhat-ods-monitoring
 oc delete namespace redhat-ods-operator
 oc delete namespace rhods-notebooks
-currentCSV=$(oc get subscription rhods-operator -n redhat-ods-operator -o yaml | grep currentCSV | sed 's/  currentCSV: //')
-echo $currentCSV
-oc delete subscription subscription rhods-operator -n redhat-ods-operator
-oc delete clusterserviceversion $currentCSV -n redhat-ods-operator
-
+namespace=redhat-ods-operator
+subscription=rhods-operator
+delete_subscription
 
 #delete  openshift-gitops operator resources
 if [[ ${1:-1} = "1" ]]; then

@@ -32,7 +32,7 @@ applications:
     annotations:
       argocd.argoproj.io/sync-wave: '15'
     source:
-      path: common/argocd
+      path: gitops/common/argocd
     destination:
       namespace: openshift-gitops 
 
@@ -41,7 +41,7 @@ applications:
     annotations:
       argocd.argoproj.io/sync-wave: '20'
     source:
-      path: common/minio
+      path: gitops/common/minio
     destination:
       namespace: minio     
 
@@ -50,7 +50,7 @@ applications:
     annotations:
       argocd.argoproj.io/sync-wave: '20'
     source:
-      path: common/pipelines
+      path: gitops/common/pipelines
     destination:
       namespace: openshift-operators      
 
@@ -59,7 +59,7 @@ applications:
     annotations:
       argocd.argoproj.io/sync-wave: '20'
     source:
-      path: common/service-mesh
+      path: gitops/common/service-mesh
     destination:
       namespace: openshift-operators  
 
@@ -68,7 +68,7 @@ applications:
     annotations:
       argocd.argoproj.io/sync-wave: '20'
     source:
-      path: common/service-mesh
+      path: gitops/common/service-mesh
     destination:
       namespace: openshift-serverless
 
@@ -77,7 +77,7 @@ applications:
     annotations:
       argocd.argoproj.io/sync-wave: '25'
     source:
-      path: common/service-mesh
+      path: gitops/common/service-mesh
     destination:
       namespace: redhat-ods-operator  
   # rbac:
@@ -85,41 +85,41 @@ applications:
   #   annotations:
   #     argocd.argoproj.io/sync-wave: '10'
   #   source:
-  #     path: common/rbac/base
+  #     path: gitops/common/rbac/base
 
   # sealed-secrets:
   #   project: cluster-config
   #   annotations:
   #     argocd.argoproj.io/sync-wave: '10'
   #   source:
-  #     path: common/sealed-secrets/base
+  #     path: gitops/common/sealed-secrets/base
   # postgresdb:
   #   project: cluster-config
   #   annotations:
   #     argocd.argoproj.io/sync-wave: '20'
   #   source:
-  #     path: common/postgresdb/base
+  #     path: gitops/common/postgresdb/base
 
   # nfd:
   #   project: cluster-config
   #   annotations:
   #     argocd.argoproj.io/sync-wave: '20'
   #   source:
-  #     path: common/nfd/base
+  #     path: gitops/common/nfd/base
 
   # nvidia-gpu-operator:
   #   project: cluster-config
   #   annotations:
   #     argocd.argoproj.io/sync-wave: '20'
   #   source:
-  #     path: common/nvidia-gpu/base
+  #     path: gitops/common/nvidia-gpu/base
 
   # rhods:
   #   project: cluster-config
   #   annotations:
   #     argocd.argoproj.io/sync-wave: '20'
   #   source:
-  #     path: common/rhods/base
+  #     path: gitops/common/rhods/base
 
   # custom-notebooks:
   #   project: cluster-config
