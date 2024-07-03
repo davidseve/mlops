@@ -31,7 +31,7 @@ if [[ $? -eq 1 ]]; then
   # create resources
   oc apply -f bootstrap/argocd-installation.yaml
   # approve new installplan
-  sleep 1m
+  sleep 30
 
   installPlan=$(oc -n openshift-gitops-operator get subscriptions.operators.coreos.com -o jsonpath='{.items[0].status.installPlanRef.name}')
   oc -n openshift-gitops-operator patch installplan "${installPlan}" --type=json -p='[{"op":"replace","path": "/spec/approved", "value": true}]'
@@ -45,7 +45,17 @@ if [[ $? -eq 1 ]]; then
 
   # annotate it to enable SSA
   oc -n openshift-gitops annotate --overwrite argocd/openshift-gitops argocd.argoproj.io/sync-options=ServerSideApply=true
+
+  # oc extract secret/openshift-gitops-cluster -n openshift-gitops --to=-
 fi
 
 # apply resources
 oc apply -f gitops/appofapp-char.yaml
+sleep 30
+
+# wait until argocd-app-of-app is available
+status=$(oc get application argocd-app-of-app  -o jsonpath='{ .status.health.status }')
+while [[ "${status}" != "Healthy" ]]; do
+  sleep 5;
+  status=$(oc get application argocd-app-of-app  -o jsonpath='{ .status.health.status }')
+done
