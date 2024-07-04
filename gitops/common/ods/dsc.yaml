@@ -2,6 +2,7 @@ apiVersion: datasciencecluster.opendatahub.io/v1
 kind: DataScienceCluster
 metadata:
   name: default-dsc
+  namespace: redhat-ods-operator
   annotations:
     argocd.argoproj.io/sync-wave: "10"  
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true    

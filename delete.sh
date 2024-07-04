@@ -35,6 +35,11 @@ oc delete clusterserviceversion $currentCSV -n $namespace
 oc delete namespace $namespace
 
 #service-mesh deletion
+namespace=openshift-operators
+subscription=servicemeshoperator
+currentCSV=$(oc get subscription $subscription -n $namespace -o yaml | grep currentCSV | sed 's/  currentCSV: //')
+echo $currentCSV
+oc delete application -n openshift-gitops service-mesh
 oc delete smmr -n istio-system default
 oc delete smcp -n istio-system basic
 oc delete validatingwebhookconfiguration/openshift-operators.servicemesh-resources.maistra.io
@@ -48,11 +53,6 @@ oc get crds -o name | grep '.*\.maistra\.io' | xargs -r -n 1 oc delete
 oc get crds -o name | grep '.*\.kiali\.io' | xargs -r -n 1 oc delete
 oc delete crds jaegers.jaegertracing.io
 oc delete project istio-system
-namespace=openshift-operators
-subscription=servicemeshoperator
-currentCSV=$(oc get subscription $subscription -n $namespace -o yaml | grep currentCSV | sed 's/  currentCSV: //')
-echo $currentCSV
-oc delete application -n openshift-gitops service-mesh
 oc delete subscription subscription $subscription -n $namespace
 oc delete clusterserviceversion $currentCSV -n $namespace
 
