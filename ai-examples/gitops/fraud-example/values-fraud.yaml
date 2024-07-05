@@ -1,5 +1,4 @@
 # openshift user using the project - to add the right user in the UI
-#TODO
 user: kubeadmin
 clusterURL: https://rhods-dashboard-redhat-ods-applications.apps.cluster-87xpx.87xpx.sandbox1137.opentlc.com
 project:
