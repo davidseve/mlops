@@ -31,7 +31,7 @@ if [[ $? -eq 1 ]]; then
   # create resources
   oc apply -f bootstrap/argocd-installation.yaml
   # approve new installplan
-  sleep 30
+  sleep 1m
 
   installPlan=$(oc -n openshift-gitops-operator get subscriptions.operators.coreos.com -o jsonpath='{.items[0].status.installPlanRef.name}')
   oc -n openshift-gitops-operator patch installplan "${installPlan}" --type=json -p='[{"op":"replace","path": "/spec/approved", "value": true}]'
@@ -50,12 +50,24 @@ if [[ $? -eq 1 ]]; then
 fi
 
 # apply resources
-oc apply -f gitops/appofapp-char.yaml
+oc apply -f ./bootstrap/gitops/appofapp-char.yaml
 sleep 30
 
 # wait until argocd-app-of-app is available
-status=$(oc get application argocd-app-of-app  -o jsonpath='{ .status.health.status }')
+status=$(oc get application.argoproj.io argocd-app-of-app -n openshift-gitops -o jsonpath='{ .status.health.status }')
 while [[ "${status}" != "Healthy" ]]; do
   sleep 5;
-  status=$(oc get application argocd-app-of-app  -o jsonpath='{ .status.health.status }')
+  status=$(oc get application.argoproj.io argocd-app-of-app -n openshift-gitops -o jsonpath='{ .status.health.status }')
 done
+
+# wait until redhat-ods-applications are running
+./bootstrap/ns-pods-running.sh redhat-ods-applications
+
+echo "ArgoCD route:"
+printf "https://$(oc get route -n openshift-gitops openshift-gitops-server -o jsonpath='{.spec.host}')\n\n"
+
+echo "Admin ArgoCD password:"
+oc extract secret/openshift-gitops-cluster -n openshift-gitops --to=-
+
+echo "RHAI dashboard:"
+printf "https://$(oc get route -n redhat-ods-applications rhods-dashboard -o jsonpath='{.spec.host}')\n\n"
