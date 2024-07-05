@@ -12,7 +12,23 @@ default:
       server: https://kubernetes.default.svc
     source:       
       repoURL: 'https://github.com/davidseve/mlops.git'
-      targetRevision: HEAD            
+      targetRevision: HEAD      
+projects:
+  cluster-config:
+    annotations:
+      notifications.argoproj.io/subscribe.on-sync-failed.slack: cluster-gitops
+      notifications.argoproj.io/subscribe.on-health-degraded.slack: cluster-gitops
+    description: Project for overall cluster configuration
+    namespace: openshift-gitops
+    destinations: |
+      - namespace: '*'
+        server: https://kubernetes.default.svc
+    sourceRepos:
+      - https://github.com/davidseve/mlops.git  
+    extraFields: |
+      clusterResourceWhitelist:
+      - group: '*'
+        kind: '*'           
 
 applications:
   argocd:
