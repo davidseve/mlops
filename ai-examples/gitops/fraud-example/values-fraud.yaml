@@ -1,0 +1,46 @@
+# openshift user using the project - to add the right user in the UI
+#TODO
+user: kubeadmin
+clusterURL: https://rhods-dashboard-redhat-ods-applications.apps.cluster-87xpx.87xpx.sandbox1137.opentlc.com
+project:
+  # name of the data scienece project
+  name: fraud
+  # true if project doesn't exist now
+  autocreate: true
+notebooks:
+  - notebook-one:
+    enabled: true
+      # name of the workbench
+    name: workbench-one
+      # image used by the workbench
+    image: image-registry.openshift-image-registry.svc:5000/redhat-ods-applications/tensorflow:2024.1
+    size: Small
+      # resorces added to the notebook pod
+    resources:
+      limits:
+        gpu: 0 # set to 0 to disable gpu
+        cpu: '2'
+        memory: 8Gi
+      requests:
+        cpu: '1'
+        memory: 8Gi
+    storage:
+      # storage name if storage is enabled
+      name: storage-workbench-one
+      # storage size if storage is enabled
+      size: 20Gi
+    dataconnections:
+      - dataconnection-one
+dataconnections:
+  - dataconnection-notebook-one:
+    # name of the data connection
+    name: dataconnection-one
+    data:
+      AWS_ACCESS_KEY_ID: bWluaW8=
+      AWS_DEFAULT_REGION: ZXUtc291dGgtMg==
+      AWS_S3_BUCKET: bWxvcHMtZXhhbXBsZS1ub3RlYm9vay1vbmUK
+      AWS_S3_ENDPOINT: aHR0cDovL21pbmlvLW1sLXdvcmtzaG9wLm1pbmlvLXN5c3RlbS5zdmMuY2x1c3Rlci5sb2NhbDo5MDAw
+      AWS_SECRET_ACCESS_KEY: bWluaW8xMjM=
+pipeline:
+  # enable / diable pipeline
+  enabled: false

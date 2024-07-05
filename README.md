@@ -8,15 +8,14 @@ oc login
 oc get deployments -n redhat-ods-applications
 
 ## Create ai project
-https://docs.redhat.com/en/documentation/red_hat_openshift_ai_self-managed/2.7/html-single/working_on_data_science_projects/index#creating-a-data-science-project_nb-server
-kind: Project                             1
-apiVersion: project.openshift.io/v1
-metadata:
-  name: my-ai-project                     2
-  labels:
-    kubernetes.io/metadata.name: my-ai-project
-    modelmesh-enabled: 'true'
-    opendatahub.io/dashboard: 'true' 
+TODO
+automatizar la subido del modelo fraud
+https://docs.redhat.com/en/documentation/red_hat_openshift_ai_self-managed/2-latest/html/openshift_ai_tutorial_-_fraud_detection_example/creating-a-workbench-and-a-notebook#importing-files-into-jupyter
+
+TODO
+test from ArgoCD fraud 
+add waves to namespace if needed
+
 
 ## Adding a data connection to your data science project
 
@@ -26,6 +25,10 @@ metadata:
 
 
 ## Starting a workbench
+
+## Enabling data science pipelines
+TODO 
+https://docs.redhat.com/en/documentation/red_hat_openshift_ai_self-managed/2-latest/html/openshift_ai_tutorial_-_fraud_detection_example/setting-up-a-project-and-storage#enabling-data-science-pipelines
 
 
 ## Deleting a workbench from a data science project

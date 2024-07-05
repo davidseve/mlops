@@ -1,0 +1,21 @@
+{{ range $dataconnection := $.Values.dataconnections }}
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ $dataconnection.name }}
+  namespace: {{ $.Values.project.name }}
+  labels:
+    opendatahub.io/dashboard: 'true'
+    opendatahub.io/managed: 'true'
+  annotations:
+    opendatahub.io/connection-type: s3
+    openshift.io/display-name: {{ $dataconnection.name }}
+data:
+  AWS_ACCESS_KEY_ID: {{ $dataconnection.data.AWS_ACCESS_KEY_ID }}
+  AWS_DEFAULT_REGION: {{ $dataconnection.data.AWS_DEFAULT_REGION }}
+  AWS_S3_BUCKET: {{ $dataconnection.data.AWS_S3_BUCKET }}
+  AWS_S3_ENDPOINT: {{ $dataconnection.data.AWS_S3_ENDPOINT }}
+  AWS_SECRET_ACCESS_KEY: {{ $dataconnection.data.AWS_SECRET_ACCESS_KEY }}
+type: Opaque
+{{- end }}

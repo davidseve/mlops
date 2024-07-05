@@ -9,7 +9,7 @@ spec:
     server: 'https://kubernetes.default.svc'
   project: default
   source: 
-    path: gitops/ai-resources
+    path: gitops/ai-resources/charts/onboard-datascience/
     repoURL: 'https://github.com/davidseve/mlops.git'
     targetRevision: HEAD
   syncPolicy:

@@ -1,0 +1,230 @@
+{{ range $notebook := $.Values.notebooks }}
+{{- if $notebook.enabled }}
+---
+apiVersion: kubeflow.org/v1
+kind: Notebook
+metadata:
+  annotations:
+    notebooks.opendatahub.io/inject-oauth: 'true'
+    opendatahub.io/image-display-name: {{ $notebook.name }}
+    notebooks.opendatahub.io/oauth-logout-url: '{{ $.Values.clusterURL }}/projects/{{ $.Values.project.name }}?notebookLogout=-{{ $notebook.name }}'
+    opendatahub.io/accelerator-name: ''
+    openshift.io/description: {{ $notebook.name }}
+    openshift.io/display-name: {{ $notebook.name }}
+    openshift.io/kubernetes-id: {{ $notebook.name }}
+    notebooks.opendatahub.io/last-image-selection:  {{ $notebook.image}}
+    notebooks.opendatahub.io/last-size-selection: {{ $notebook.size }}
+    opendatahub.io/username: {{ $.Values.user }}
+  name: {{ $notebook.name }}
+  namespace: {{ $.Values.project.name }}
+  labels:
+    app: {{ $notebook.name }}
+    opendatahub.io/dashboard: 'true'
+    opendatahub.io/odh-managed: 'true'
+    opendatahub.io/user: {{ $.Values.user }}
+spec:
+  template:
+    spec:
+      {{- if $notebook.resources }}
+      {{- if $notebook.resources.limits }}
+      {{- if gt $notebook.resources.limits.gpu 0.0 }}
+      tolerations:
+        - key: nvidia.com/gpu
+          operator: Exists
+          effect: NoSchedule
+      {{- end }}
+      {{- end }}
+      {{- end }}
+      containers:
+        - readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /notebook/{{ $.Values.project.name }}/{{ $notebook.name }}/api
+              port: notebook-port
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            successThreshold: 1
+            timeoutSeconds: 1
+          {{- if $notebook.resources }}
+          resources:
+            {{- if $notebook.resources.limits }}
+            limits:
+              {{- if gt $notebook.resources.limits.gpu 0.0 }}
+              nvidia.com/gpu: {{ $notebook.resources.limits.gpu | int }}
+              {{- end }}
+              cpu: {{ $notebook.resources.limits.cpu }}
+              memory: {{ $notebook.resources.limits.memory }}
+            {{- end }}
+            {{- if $notebook.resources.requests }}
+            requests:
+              cpu: {{ $notebook.resources.requests.cpu }}
+              memory: {{ $notebook.resources.requests.memory }}
+            {{- end }}
+          {{- end }}
+          name: {{ $notebook.name }}
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /notebook/{{ $.Values.project.name }}/{{ $notebook.name }}/api
+              port: notebook-port
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            successThreshold: 1
+            timeoutSeconds: 1
+          env:
+            - name: NOTEBOOK_ARGS
+              value: |-
+                --ServerApp.port=8888
+                                  --ServerApp.token=''
+                                  --ServerApp.password=''
+                                  --ServerApp.base_url=/notebook/{{ $.Values.project.name }}/{{ $notebook.name }}
+                                  --ServerApp.quit_button=False
+                                  --ServerApp.tornado_settings={"user":"{{ $.Values.user }}","hub_host":"{{ $.Values.clusterURL }}","hub_prefix":"/projects/{{ $.Values.project.name }}"}
+            - name: JUPYTER_IMAGE
+              value:  {{ $notebook.image }}
+            - name: PIP_CERT
+              value: /etc/pki/tls/custom-certs/ca-bundle.crt
+            - name: REQUESTS_CA_BUNDLE
+              value: /etc/pki/tls/custom-certs/ca-bundle.crt
+            - name: SSL_CERT_FILE
+              value: /etc/pki/tls/custom-certs/ca-bundle.crt
+            - name: PIPELINES_SSL_SA_CERTS
+              value: /etc/pki/tls/custom-certs/ca-bundle.crt
+            - name: GIT_SSL_CAINFO
+              value: /etc/pki/tls/custom-certs/ca-bundle.crt              
+          ports:
+            - containerPort: 8888
+              name: notebook-port
+              protocol: TCP
+          imagePullPolicy: Always
+          volumeMounts:
+            {{- if $notebook.storage }}
+            - mountPath: /opt/app-root/src
+              name: {{ $notebook.name }}
+            {{- end }}
+            - mountPath: /dev/shm
+              name: shm
+            - mountPath: /etc/pki/tls/custom-certs/ca-bundle.crt
+              name: trusted-ca
+              readOnly: true
+              subPath: ca-bundle.crt               
+          envFrom:
+            {{- if $notebook.dataconnections }}
+            {{- range $dataconnection := $notebook.dataconnections }}
+            - secretRef:
+                name: {{ $dataconnection }}
+            {{- end }}
+            {{- end }}         
+          image: {{ $notebook.image}}
+          workingDir: /opt/app-root/src
+        - resources:
+            limits:
+              cpu: 100m
+              memory: 64Mi
+            requests:
+              cpu: 100m
+              memory: 64Mi
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /oauth/healthz
+              port: oauth-proxy
+              scheme: HTTPS
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            successThreshold: 1
+            timeoutSeconds: 1
+          name: oauth-proxy
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /oauth/healthz
+              port: oauth-proxy
+              scheme: HTTPS
+            initialDelaySeconds: 30
+            periodSeconds: 5
+            successThreshold: 1
+            timeoutSeconds: 1
+          env:
+            - name: NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+          ports:
+            - containerPort: 8443
+              name: oauth-proxy
+              protocol: TCP
+          imagePullPolicy: Always
+          volumeMounts:
+            - mountPath: /etc/oauth/config
+              name: oauth-config
+            - mountPath: /etc/tls/private
+              name: tls-certificates
+          image: 'registry.redhat.io/openshift4/ose-oauth-proxy@sha256:4bef31eb993feb6f1096b51b4876c65a6fb1f4401fee97fa4f4542b6b7c9bc46'
+          args:
+            - '--provider=openshift'
+            - '--https-address=:8443'
+            - '--http-address='
+            - '--openshift-service-account={{ $notebook.name }}'
+            - '--cookie-secret-file=/etc/oauth/config/cookie_secret'
+            - '--cookie-expire=24h0m0s'
+            - '--tls-cert=/etc/tls/private/tls.crt'
+            - '--tls-key=/etc/tls/private/tls.key'
+            - '--upstream=http://localhost:8888'
+            - '--upstream-ca=/var/run/secrets/kubernetes.io/serviceaccount/ca.crt'
+            - '--email-domain=*'
+            - '--skip-provider-button'
+            - '--openshift-sar={"verb":"get","resource":"notebooks","resourceAPIGroup":"kubeflow.org","resourceName":"{{ $notebook.name }}","namespace":"$(NAMESPACE)"}'
+            - '--logout-url={{ $.Values.clusterURL }}/projects/{{ $.Values.project.name }}?notebookLogout={{ $notebook.name }}'
+      enableServiceLinks: false
+      serviceAccountName: {{ $notebook.name }}
+      volumes:
+        {{- if $notebook.storage }}
+        - name: {{ $notebook.name }}
+          persistentVolumeClaim:
+            claimName: {{ $notebook.storage.name }}
+        {{- end }}
+        - emptyDir:
+            medium: Memory
+          name: shm
+        - name: oauth-config
+          secret:
+            defaultMode: 420
+            secretName: {{ $notebook.name }}-oauth-config
+        - name: tls-certificates
+          secret:
+            defaultMode: 420
+            secretName: {{ $notebook.name }}-tls
+        - configMap:
+            items:
+              - key: ca-bundle.crt
+                path: ca-bundle.crt
+            name: workbench-trusted-ca-bundle
+            optional: true
+          name: trusted-ca            
+---
+{{ if $notebook.storage -}}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  annotations:
+    openshift.io/description: "Storage for {{ $.Values.project.name }}" 
+    openshift.io/display-name: {{ $notebook.storage.name }}
+  name: {{ $notebook.storage.name }}
+  namespace: {{ $.Values.project.name }}
+  finalizers:
+    - kubernetes.io/pvc-protection
+  labels:
+    opendatahub.io/dashboard: 'true'
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ $notebook.storage.size }}
+  volumeMode: Filesystem
+{{- end }}
+{{- end }}
+{{- end }}
