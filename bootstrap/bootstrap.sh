@@ -60,6 +60,7 @@ while [[ "${status}" != "Healthy" ]]; do
   status=$(oc get application.argoproj.io argocd-app-of-app -n openshift-gitops -o jsonpath='{ .status.health.status }')
 done
 
+sleep 30 # for redhat-ods-applications
 # wait until redhat-ods-applications are running
 ./bootstrap/ns-pods-running.sh redhat-ods-applications
 

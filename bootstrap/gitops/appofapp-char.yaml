@@ -14,7 +14,7 @@ spec:
       targetRevision: 0.4.1
       helm:
         valueFiles:
-        - $values/gitops/appofapps-values.yaml  
+        - $values/bootstrap/gitops/appofapps-values.yaml  
     - ref: values
       repoURL: 'https://github.com/davidseve/mlops.git'
       targetRevision: HEAD

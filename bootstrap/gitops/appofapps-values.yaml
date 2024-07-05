@@ -12,23 +12,7 @@ default:
       server: https://kubernetes.default.svc
     source:       
       repoURL: 'https://github.com/davidseve/mlops.git'
-      targetRevision: HEAD      
-projects:
-  cluster-config:
-    annotations:
-      notifications.argoproj.io/subscribe.on-sync-failed.slack: cluster-gitops
-      notifications.argoproj.io/subscribe.on-health-degraded.slack: cluster-gitops
-    description: Project for overall cluster configuration
-    namespace: openshift-gitops
-    destinations: |
-      - namespace: '*'
-        server: https://kubernetes.default.svc
-    sourceRepos:
-      - https://github.com/davidseve/mlops.git  
-    extraFields: |
-      clusterResourceWhitelist:
-      - group: '*'
-        kind: '*'           
+      targetRevision: HEAD            
 
 applications:
   argocd:
@@ -36,7 +20,7 @@ applications:
     annotations:
       argocd.argoproj.io/sync-wave: '15'
     source:
-      path: gitops/common/argocd
+      path: bootstrap/gitops/common/argocd
     destination:
       namespace: openshift-gitops
 
@@ -45,7 +29,7 @@ applications:
     annotations:
       argocd.argoproj.io/sync-wave: '20'
     source:
-      path: gitops/common/minio
+      path: bootstrap/gitops/common/minio
     destination:
       namespace: minio     
 
@@ -54,7 +38,7 @@ applications:
     annotations:
       argocd.argoproj.io/sync-wave: '20'
     source:
-      path: gitops/common/pipelines
+      path: bootstrap/gitops/common/pipelines
     destination:
       namespace: openshift-operators      
 
@@ -63,7 +47,7 @@ applications:
     annotations:
       argocd.argoproj.io/sync-wave: '20'
     source:
-      path: gitops/common/service-mesh
+      path: bootstrap/gitops/common/service-mesh
     destination:
       namespace: openshift-operators  
 
@@ -72,7 +56,7 @@ applications:
     annotations:
       argocd.argoproj.io/sync-wave: '20'
     source:
-      path: gitops/common/serverless
+      path: bootstrap/gitops/common/serverless
     destination:
       namespace: openshift-serverless
 
@@ -81,7 +65,7 @@ applications:
     annotations:
       argocd.argoproj.io/sync-wave: '25'
     source:
-      path: gitops/common/ods
+      path: bootstrap/gitops/common/ods
     destination:
       namespace: redhat-ods-operator  
       
@@ -90,41 +74,41 @@ applications:
   #   annotations:
   #     argocd.argoproj.io/sync-wave: '10'
   #   source:
-  #     path: gitops/common/rbac/base
+  #     path: bootstrap/gitops/common/rbac/base
 
   # sealed-secrets:
   #   project: cluster-config
   #   annotations:
   #     argocd.argoproj.io/sync-wave: '10'
   #   source:
-  #     path: gitops/common/sealed-secrets/base
+  #     path: bootstrap/gitops/common/sealed-secrets/base
   # postgresdb:
   #   project: cluster-config
   #   annotations:
   #     argocd.argoproj.io/sync-wave: '20'
   #   source:
-  #     path: gitops/common/postgresdb/base
+  #     path: bootstrap/gitops/common/postgresdb/base
 
   # nfd:
   #   project: cluster-config
   #   annotations:
   #     argocd.argoproj.io/sync-wave: '20'
   #   source:
-  #     path: gitops/common/nfd/base
+  #     path: bootstrap/gitops/common/nfd/base
 
   # nvidia-gpu-operator:
   #   project: cluster-config
   #   annotations:
   #     argocd.argoproj.io/sync-wave: '20'
   #   source:
-  #     path: gitops/common/nvidia-gpu/base
+  #     path: bootstrap/gitops/common/nvidia-gpu/base
 
   # rhods:
   #   project: cluster-config
   #   annotations:
   #     argocd.argoproj.io/sync-wave: '20'
   #   source:
-  #     path: gitops/common/rhods/base
+  #     path: bootstrap/gitops/common/rhods/base
 
   # custom-notebooks:
   #   project: cluster-config
