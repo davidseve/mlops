@@ -59,20 +59,27 @@ oc delete clusterserviceversion $currentCSV -n $namespace
 kubectl patch application.argoproj.io ods -n openshift-gitops --type='json' -p='[{"op": "remove", "path": "/spec/syncPolicy/automated"}]'
 oc delete datasciencecluster default-dsc
 oc delete dscinitialization default-dsci
+oc create configmap delete-self-managed-odh -n redhat-ods-operator
 oc label configmap/delete-self-managed-odh api.openshift.com/addon-managed-odh-delete=true -n redhat-ods-operator
+PROJECT_NAME=redhat-ods-applications
+while oc get project $PROJECT_NAME &> /dev/null; do
+  echo "The $PROJECT_NAME project still exists"
+  sleep 1
+done
+echo "The $PROJECT_NAME project no longer exists"
 namespace=redhat-ods-operator
 subscription=rhods-operator
 currentCSV=$(oc get subscription $subscription -n $namespace -o yaml | grep currentCSV | sed 's/  currentCSV: //')
 echo $currentCSV
 oc delete application.argoproj.io -n openshift-gitops ods
-oc delete subscription subscription $subscription -n $namespace
-oc delete clusterserviceversion $currentCSV -n $namespace
 oc delete namespace redhat-ods-operator & /
 oc delete namespace redhat-ods-applications & /
 oc delete namespace redhat-ods-monitoring & /
 oc delete namespace rhods-notebooks
 oc delete ns -l opendatahub.io/generated-namespace & /
 oc delete ns -l opendatahub.io/dashboard=true
+oc delete subscription subscription $subscription -n $namespace
+oc delete clusterserviceversion $currentCSV -n $namespace
 
 # delete resources
 oc delete application.argoproj.io -n openshift-gitops minio & /
