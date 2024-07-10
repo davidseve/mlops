@@ -1,2 +1,2 @@
 appname=ai-fraud-example
-./app-delete.sh $appname
+../app-delete.sh $appname

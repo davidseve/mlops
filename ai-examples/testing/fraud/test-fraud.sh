@@ -1,7 +1,7 @@
 
 #!/bin/bash
 
-appfile=../gitops/fraud-example/app-ai-fraud.yaml 
+appfile=../../gitops/fraud-example/app-ai-fraud.yaml 
 appname=ai-fraud-example
 workbench=workbench-one
 namespace=fraud
@@ -31,9 +31,3 @@ do
     sleep 2 
     test=$(oc get po -n ${2} | grep ${1})
 done
-
-#oc delete application.argoproj.io -n openshift-gitops ai-fraud-example --cascade='foreground'
-
-
---logout-url=https://rhods-dashboard-redhat-ods-applications.apps.cluster-87xpx.87xpx.sandbox1137.opentlc.com/projects/fraud?notebookLogout=-workbench-one
---logout-url=https://rhods-dashboard-redhat-ods-applications.apps.cluster-87xpx.87xpx.sandbox1137.opentlc.com/projects/fraud?notebookLogout=workbench-one

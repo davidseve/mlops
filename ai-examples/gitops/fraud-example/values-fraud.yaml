@@ -35,20 +35,11 @@ dataconnections:
     # name of the data connection
     name: dataconnection-one
     data:
-      AWS_ACCESS_KEY_ID: bWluaW8=
+      AWS_ACCESS_KEY_ID: bWluaW8= #from create-root-user-job.yaml MINIO_ROOT_USER
       AWS_DEFAULT_REGION: ZXUtc291dGgtMg==
       AWS_S3_BUCKET: bWxvcHMtZXhhbXBsZS1ub3RlYm9vay1vbmUK
-      AWS_S3_ENDPOINT: aHR0cDovL21pbmlvLW1sLXdvcmtzaG9wLm1pbmlvLXN5c3RlbS5zdmMuY2x1c3Rlci5sb2NhbDo5MDAw
-      AWS_SECRET_ACCESS_KEY: bWluaW8xMjM=
-  - dataconnection-pipeline:
-    # name of the data connection
-    name: dataconnection-pipeline
-    data:
-      AWS_ACCESS_KEY_ID: bWluaW8=
-      AWS_DEFAULT_REGION: ZXUtc291dGgtMg==
-      AWS_S3_BUCKET: ZnJhdWQtcGlwZWxpbmUtYXJ0aWZhY3RzLWJ1Y2tldAo=
-      AWS_S3_ENDPOINT: aHR0cDovL21pbmlvLW1sLXdvcmtzaG9wLm1pbmlvLXN5c3RlbS5zdmMuY2x1c3Rlci5sb2NhbDo5MDAw
-      AWS_SECRET_ACCESS_KEY: bWluaW8xMjM=      
+      AWS_S3_ENDPOINT: bWluaW8ubWluaW8uc3ZjLmNsdXN0ZXIubG9jYWwK
+      AWS_SECRET_ACCESS_KEY: bWluaW8xMjM=  #from create-root-user-job.yaml MINIO_ROOT_PASSWORD   
 pipeline:
   # enable / diable pipeline
   enabled: true
@@ -58,6 +49,6 @@ pipeline:
       AWS_ACCESS_KEY_ID: bWluaW8=
       AWS_DEFAULT_REGION: ZXUtc291dGgtMg==
       AWS_S3_BUCKET: ZnJhdWQtcGlwZWxpbmUtYXJ0aWZhY3RzLWJ1Y2tldAo=
-      AWS_S3_ENDPOINT: aHR0cDovL21pbmlvLW1sLXdvcmtzaG9wLm1pbmlvLXN5c3RlbS5zdmMuY2x1c3Rlci5sb2NhbDo5MDAw
+      AWS_S3_ENDPOINT: bWluaW8ubWluaW8uc3ZjLmNsdXN0ZXIubG9jYWwK
       AWS_SECRET_ACCESS_KEY: bWluaW8xMjM=
       scheme: http  
