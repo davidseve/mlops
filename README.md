@@ -7,6 +7,8 @@ oc login
 TODO if needed
 To add Authorino as an authorization provider so that you can enable token authorization for deployed models, you have installed the Red Hat - Authorino Operator. See Installing the Authorino Operator.
 https://docs.redhat.com/en/documentation/red_hat_openshift_ai_self-managed/2-latest/html/serving_models/serving-large-models_serving-large-models?extIdCarryOver=true&sc_cid=701f2000001Css5AAC#installing-the-authorino-operator_serving-large-models
+https://github.com/rh-aiservices-bu/rhoai-demo-auth
+
 
 TODO if needed
 Use Existing OpenShift Certificate for Single Stack Serving

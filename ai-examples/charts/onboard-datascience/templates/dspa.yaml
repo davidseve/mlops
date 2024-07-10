@@ -1,0 +1,55 @@
+{{- if .Values.pipeline.enabled }}
+---
+apiVersion: datasciencepipelinesapplications.opendatahub.io/v1alpha1
+kind: DataSciencePipelinesApplication
+metadata:
+  name: dspa-{{ .Values.pipeline.name }}
+  namespace: {{ $.Values.project.name }}
+  # annotations:
+  #   argocd.argoproj.io/compare-options: IgnoreExtraneous
+  #   argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  apiServer:
+    caBundleFileMountPath: ''
+    stripEOF: true
+    dbConfigConMaxLifetimeSec: 120
+    applyTektonCustomResource: true
+    caBundleFileName: ''
+    deploy: true
+    enableSamplePipeline: false
+    autoUpdatePipelineDefaultVersion: true
+    archiveLogs: false
+    terminateStatus: Cancelled
+    enableOauth: true
+    trackArtifacts: true
+    collectMetrics: true
+    injectDefaultScript: true
+  database:
+    disableHealthCheck: false
+    mariaDB:
+      deploy: true
+      pipelineDBName: mlpipeline
+      pvcSize: 10Gi
+      username: mlpipeline
+  dspVersion: v2
+  objectStorage:
+    disableHealthCheck: false
+    enableExternalRoute: false
+    externalStorage:
+      basePath: ''
+      bucket: '{{ .Values.pipeline.dataconnection.data.AWS_S3_BUCKET}}'
+      host: '{{ .Values.pipeline.dataconnection.data.AWS_S3_ENDPOINT }}'
+      port: ''
+      region: '{{ .Values.pipeline.dataconnection.data.AWS_DEFAULT_REGION }}'
+      s3CredentialsSecret:
+        accessKey: AWS_ACCESS_KEY_ID
+        secretKey: AWS_SECRET_ACCESS_KEY
+        secretName: {{ .Values.pipeline.name }}
+      scheme: {{ .Values.pipeline.dataconnection.data.scheme }}
+  persistenceAgent:
+    deploy: true
+    numWorkers: 2
+  scheduledWorkflow:
+    cronScheduleTimezone: UTC
+    deploy: true
+{{- end }}

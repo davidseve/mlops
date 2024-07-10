@@ -40,6 +40,24 @@ dataconnections:
       AWS_S3_BUCKET: bWxvcHMtZXhhbXBsZS1ub3RlYm9vay1vbmUK
       AWS_S3_ENDPOINT: aHR0cDovL21pbmlvLW1sLXdvcmtzaG9wLm1pbmlvLXN5c3RlbS5zdmMuY2x1c3Rlci5sb2NhbDo5MDAw
       AWS_SECRET_ACCESS_KEY: bWluaW8xMjM=
+  - dataconnection-pipeline:
+    # name of the data connection
+    name: dataconnection-pipeline
+    data:
+      AWS_ACCESS_KEY_ID: bWluaW8=
+      AWS_DEFAULT_REGION: ZXUtc291dGgtMg==
+      AWS_S3_BUCKET: ZnJhdWQtcGlwZWxpbmUtYXJ0aWZhY3RzLWJ1Y2tldAo=
+      AWS_S3_ENDPOINT: aHR0cDovL21pbmlvLW1sLXdvcmtzaG9wLm1pbmlvLXN5c3RlbS5zdmMuY2x1c3Rlci5sb2NhbDo5MDAw
+      AWS_SECRET_ACCESS_KEY: bWluaW8xMjM=      
 pipeline:
   # enable / diable pipeline
-  enabled: false
+  enabled: true
+  name: pipeline-one  
+  dataconnection:
+    data:
+      AWS_ACCESS_KEY_ID: bWluaW8=
+      AWS_DEFAULT_REGION: ZXUtc291dGgtMg==
+      AWS_S3_BUCKET: ZnJhdWQtcGlwZWxpbmUtYXJ0aWZhY3RzLWJ1Y2tldAo=
+      AWS_S3_ENDPOINT: aHR0cDovL21pbmlvLW1sLXdvcmtzaG9wLm1pbmlvLXN5c3RlbS5zdmMuY2x1c3Rlci5sb2NhbDo5MDAw
+      AWS_SECRET_ACCESS_KEY: bWluaW8xMjM=
+      scheme: http  
