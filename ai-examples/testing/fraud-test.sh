@@ -1,7 +1,7 @@
 
 #!/bin/bash
 
-appfile=ai-examples/gitops/fraud-example/app-ai-fraud.yaml 
+appfile=../gitops/fraud-example/app-ai-fraud.yaml 
 appname=ai-fraud-example
 workbench=workbench-one
 namespace=fraud
