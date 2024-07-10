@@ -35,20 +35,21 @@ dataconnections:
     # name of the data connection
     name: dataconnection-one
     data:
-      AWS_ACCESS_KEY_ID: bWluaW8= #from create-root-user-job.yaml MINIO_ROOT_USER
-      AWS_DEFAULT_REGION: ZXUtc291dGgtMg==
-      AWS_S3_BUCKET: bWxvcHMtZXhhbXBsZS1ub3RlYm9vay1vbmUK
-      AWS_S3_ENDPOINT: bWluaW8ubWluaW8uc3ZjLmNsdXN0ZXIubG9jYWwK
-      AWS_SECRET_ACCESS_KEY: bWluaW8xMjM=  #from create-root-user-job.yaml MINIO_ROOT_PASSWORD   
+
+      AWS_ACCESS_KEY_ID: minio #from create-root-user-job.yaml MINIO_ROOT_USER
+      AWS_DEFAULT_REGION: eu-south-2
+      AWS_S3_BUCKET: fraud-bucket
+      AWS_S3_ENDPOINT: minio.minio.svc.cluster.local
+      AWS_SECRET_ACCESS_KEY: minio123 #from create-root-user-job.yaml MINIO_ROOT_PASSWORD    
 pipeline:
   # enable / diable pipeline
   enabled: true
   name: pipeline-one  
   dataconnection:
     data:
-      AWS_ACCESS_KEY_ID: bWluaW8=
-      AWS_DEFAULT_REGION: ZXUtc291dGgtMg==
-      AWS_S3_BUCKET: ZnJhdWQtcGlwZWxpbmUtYXJ0aWZhY3RzLWJ1Y2tldAo=
-      AWS_S3_ENDPOINT: bWluaW8ubWluaW8uc3ZjLmNsdXN0ZXIubG9jYWwK
-      AWS_SECRET_ACCESS_KEY: bWluaW8xMjM=
+      AWS_ACCESS_KEY_ID: minio #from create-root-user-job.yaml MINIO_ROOT_USER
+      AWS_DEFAULT_REGION: eu-south-2
+      AWS_S3_BUCKET: fraud-pipeline-artifacts-bucket
+      AWS_S3_ENDPOINT: minio.minio.svc.cluster.local
+      AWS_SECRET_ACCESS_KEY: minio123 #from create-root-user-job.yaml MINIO_ROOT_PASSWORD   
       scheme: http  

@@ -11,7 +11,7 @@ metadata:
   annotations:
     opendatahub.io/connection-type: s3
     openshift.io/display-name: {{ .name }}
-data:
+stringData:
   AWS_ACCESS_KEY_ID: {{ .data.AWS_ACCESS_KEY_ID }}
   AWS_DEFAULT_REGION: {{ .data.AWS_DEFAULT_REGION }}
   AWS_S3_BUCKET: {{ .data.AWS_S3_BUCKET }}
@@ -34,7 +34,7 @@ metadata:
   annotations:
     opendatahub.io/connection-type: s3
     openshift.io/display-name: {{ .name }}
-data:
+stringData:
   AWS_ACCESS_KEY_ID: {{ .dataconnection.data.AWS_ACCESS_KEY_ID }}
   AWS_DEFAULT_REGION: {{ .dataconnection.data.AWS_DEFAULT_REGION }}
   AWS_S3_BUCKET: {{ .dataconnection.data.AWS_S3_BUCKET }}
