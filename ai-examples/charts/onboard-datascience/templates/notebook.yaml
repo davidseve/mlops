@@ -177,7 +177,7 @@ spec:
             - '--email-domain=*'
             - '--skip-provider-button'
             - '--openshift-sar={"verb":"get","resource":"notebooks","resourceAPIGroup":"kubeflow.org","resourceName":"{{ $notebook.name }}","namespace":"$(NAMESPACE)"}'
-            - '--logout-url={{ $.Values.clusterURL }}/projects/{{ $.Values.project.name }}?notebookLogout={{ $notebook.name }}'
+            - '--logout-url={{ $.Values.clusterURL }}/projects/{{ $.Values.project.name }}?notebookLogout=-{{ $notebook.name }}'
       enableServiceLinks: false
       serviceAccountName: {{ $notebook.name }}
       volumes:

@@ -11,18 +11,16 @@ https://docs.redhat.com/en/documentation/red_hat_openshift_ai_self-managed/2-lat
 TODO if needed
 Use Existing OpenShift Certificate for Single Stack Serving
 https://ai-on-openshift.io/odh-rhoai/single-stack-serving-certificate/
+https://github.com/alpha-hack-program/doc-bot/blob/main/bootstrap/hf-creds.sh
+
+
 
 
 ## Validate dsc
 oc get deployments -n redhat-ods-applications
 
-## Create ai project
-TODO
-test from ArgoCD fraud 
-add waves to namespace if needed
-
-secrets is forbidden: User "system:serviceaccount:openshift-gitops:openshift-gitops-argocd-application-controller" cannot create resource "secrets" in API group "" in the namespace "fraud"
-
+## Create ai fraud project
+oc apply -f ai-examples/gitops/fraud-example/app-ai-fraud.yaml 
 
 TODO
 automatizar la subido del modelo fraud
