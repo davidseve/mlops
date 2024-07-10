@@ -1,6 +1,6 @@
 {{- if .Values.project.autocreate }}
-apiVersion: project.openshift.io/v1
-kind: Project
+apiVersion: v1
+kind: Namespace
 metadata:
   name: {{ .Values.project.name }}
   labels:

@@ -2,7 +2,7 @@
 
 oc login
 
-./bootstrap.sh
+./bootstrap/bootstrap.sh
 
 TODO if needed
 To add Authorino as an authorization provider so that you can enable token authorization for deployed models, you have installed the Red Hat - Authorino Operator. See Installing the Authorino Operator.

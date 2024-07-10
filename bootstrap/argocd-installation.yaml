@@ -22,10 +22,8 @@ metadata:
   name: openshift-gitops-operator
   namespace: openshift-gitops-operator
 spec:
-  channel: latest
+  channel: gitops-1.12 #TODO test it
   installPlanApproval: Manual
   name: openshift-gitops-operator
   source: redhat-operators
   sourceNamespace: openshift-marketplace
-  startingCSV: openshift-gitops-operator.v1.12.1
-
