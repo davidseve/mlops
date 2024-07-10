@@ -9,6 +9,7 @@ delete_subscription(){
 set -x
 PATH=${PWD}/bin/:$PATH
 
+argocd login --core
 oc project openshift-gitops
 
 kubectl patch application.argoproj.io argocd-app-of-app -n openshift-gitops --type='json' -p='[{"op": "remove", "path": "/spec/syncPolicy/automated"}]'
@@ -18,7 +19,7 @@ namespace=openshift-operators
 subscription=openshift-pipelines-operator-rh
 currentCSV=$(oc get subscription $subscription -n $namespace -o yaml | grep currentCSV | sed 's/  currentCSV: //')
 echo $currentCSV
-oc delete application.argoproj.io -n openshift-gitops pipelines
+argocd app delete pipelines --repo-server-name openshift-gitops-repo-server -y
 oc delete subscription subscription $subscription -n $namespace
 oc delete clusterserviceversion $currentCSV -n $namespace
 
@@ -28,7 +29,7 @@ namespace=openshift-serverless
 subscription=serverless-operator
 currentCSV=$(oc get subscription $subscription -n $namespace -o yaml | grep currentCSV | sed 's/  currentCSV: //')
 echo $currentCSV
-oc delete application.argoproj.io -n openshift-gitops serverless
+argocd app delete serverless --repo-server-name openshift-gitops-repo-server -y
 oc delete subscription subscription $subscription -n $namespace
 oc delete clusterserviceversion $currentCSV -n $namespace
 oc delete namespace $namespace
@@ -38,7 +39,7 @@ namespace=openshift-operators
 subscription=servicemeshoperator
 currentCSV=$(oc get subscription $subscription -n $namespace -o yaml | grep currentCSV | sed 's/  currentCSV: //')
 echo $currentCSV
-oc delete application.argoproj.io -n openshift-gitops service-mesh
+argocd app delete service-mesh --repo-server-name openshift-gitops-repo-server -y
 oc delete smmr -n istio-system default
 oc delete smcp -n istio-system basic
 oc delete validatingwebhookconfiguration/openshift-operators.servicemesh-resources.maistra.io
@@ -57,8 +58,6 @@ oc delete clusterserviceversion $currentCSV -n $namespace
 
 #rhods deletion
 kubectl patch application.argoproj.io ods -n openshift-gitops --type='json' -p='[{"op": "remove", "path": "/spec/syncPolicy/automated"}]'
-oc delete datasciencecluster default-dsc
-oc delete dscinitialization default-dsci
 oc create configmap delete-self-managed-odh -n redhat-ods-operator
 oc label configmap/delete-self-managed-odh api.openshift.com/addon-managed-odh-delete=true -n redhat-ods-operator
 PROJECT_NAME=redhat-ods-applications
@@ -71,7 +70,9 @@ namespace=redhat-ods-operator
 subscription=rhods-operator
 currentCSV=$(oc get subscription $subscription -n $namespace -o yaml | grep currentCSV | sed 's/  currentCSV: //')
 echo $currentCSV
-oc delete application.argoproj.io -n openshift-gitops ods
+argocd app delete ods --repo-server-name openshift-gitops-repo-server -y
+oc delete datasciencecluster default-dsc
+oc delete dscinitialization default-dsci
 oc delete namespace redhat-ods-operator & /
 oc delete namespace redhat-ods-applications & /
 oc delete namespace redhat-ods-monitoring & /
@@ -82,10 +83,10 @@ oc delete subscription subscription $subscription -n $namespace
 oc delete clusterserviceversion $currentCSV -n $namespace
 
 # delete resources
-oc delete application.argoproj.io -n openshift-gitops minio & /
-oc delete application.argoproj.io argocd -n openshift-gitops
+argocd app delete minio --repo-server-name openshift-gitops-repo-server -y & /
+argocd app delete argocd --repo-server-name openshift-gitops-repo-server -y
 oc delete -f bootstrap/gitops/appofapp-char.yaml
-oc delete application.argoproj.io argocd-app-of-app -n openshift-gitops
+argocd app delete argocd-app-of-app --repo-server-name openshift-gitops-repo-server -y
 sleep 10
 
 #delete  openshift-gitops operator resources

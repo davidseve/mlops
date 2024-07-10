@@ -17,5 +17,5 @@ spec:
       - ../../gitops/fraud-example/values-fraud.yaml  
   syncPolicy:
     automated:
-      prune: false
+      prune: true
       selfHeal: true

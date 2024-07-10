@@ -53,12 +53,12 @@ spec:
               {{- if gt $notebook.resources.limits.gpu 0.0 }}
               nvidia.com/gpu: {{ $notebook.resources.limits.gpu | int }}
               {{- end }}
-              cpu: {{ $notebook.resources.limits.cpu }}
+              cpu: {{ $notebook.resources.limits.cpu | quote }}
               memory: {{ $notebook.resources.limits.memory }}
             {{- end }}
             {{- if $notebook.resources.requests }}
             requests:
-              cpu: {{ $notebook.resources.requests.cpu }}
+              cpu: {{ $notebook.resources.requests.cpu  | quote }}
               memory: {{ $notebook.resources.requests.memory }}
             {{- end }}
           {{- end }}
