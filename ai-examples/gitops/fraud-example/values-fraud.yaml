@@ -52,4 +52,4 @@ pipeline:
       AWS_S3_BUCKET: pipeline-one
       AWS_S3_ENDPOINT: minio.minio.svc.cluster.local
       AWS_SECRET_ACCESS_KEY: minio123 #from create-root-user-job.yaml MINIO_ROOT_PASSWORD   
-      scheme: https  
+      scheme: http  
