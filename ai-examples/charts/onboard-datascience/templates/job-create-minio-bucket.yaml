@@ -6,7 +6,7 @@ metadata:
   labels:
     app.kubernetes.io/component: minio
     app.kubernetes.io/instance: minio
-    app.kubernetes.io/name: minio
+    app.kubernetes.io/name: minio-{{ .name }}
     app.kubernetes.io/part-of: minio
     component: minio
   name: create-minio-buckets-{{ .name }}
@@ -75,11 +75,10 @@ spec:
       serviceAccountName: minio-manage
 {{- end }}
 
-{{ range $dataconnection := $.Values.dataconnections }}
+{{- range $dataconnection := $.Values.dataconnections }}
 {{- template "data-job" $dataconnection }}
 {{- end }}
 
-
-{{- template "data-job" $.Values.pipeline }}
+{{ template "data-job" $.Values.pipeline }}
 
 

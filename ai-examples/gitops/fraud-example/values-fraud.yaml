@@ -31,14 +31,14 @@ notebooks:
     dataconnections:
       - dataconnection-one
 dataconnections:
-  - dataconnection-notebook-one:
+  - dataconnection-one:
     # name of the data connection
     name: dataconnection-one
     data:
 
       AWS_ACCESS_KEY_ID: minio #from create-root-user-job.yaml MINIO_ROOT_USER
       AWS_DEFAULT_REGION: eu-south-2
-      AWS_S3_BUCKET: fraud-bucket
+      AWS_S3_BUCKET: dataconnection-one
       AWS_S3_ENDPOINT: minio.minio.svc.cluster.local
       AWS_SECRET_ACCESS_KEY: minio123 #from create-root-user-job.yaml MINIO_ROOT_PASSWORD    
 pipeline:
@@ -49,7 +49,7 @@ pipeline:
     data:
       AWS_ACCESS_KEY_ID: minio #from create-root-user-job.yaml MINIO_ROOT_USER
       AWS_DEFAULT_REGION: eu-south-2
-      AWS_S3_BUCKET: fraud-pipeline-artifacts-bucket
+      AWS_S3_BUCKET: pipeline-one
       AWS_S3_ENDPOINT: minio.minio.svc.cluster.local
       AWS_SECRET_ACCESS_KEY: minio123 #from create-root-user-job.yaml MINIO_ROOT_PASSWORD   
       scheme: http  
