@@ -22,7 +22,7 @@ spec:
     - description: The pipeline python script to compile
       name: PIPELINE_NAME
       type: string
-      default: deploy
+      default: get_data_train_upload
     - description: The requiretments file to install
       name: REQUIREMENTS_FILE
       type: string

@@ -4,7 +4,7 @@ appname=ai-fraud-example
 
 while true; do
     # Get the list of Application resources in the namespace
-    applications=$(kubectl get applications.argoproj.io $appname -n openshift-gitops -o jsonpath='{.items[*].metadata.name}')
+    applications=$(oc get applications.argoproj.io $appname -n openshift-gitops -o jsonpath='{.items[*].metadata.name}')
 
     # Initialize a variable to track if there are no Application resources
     no_applications=true
