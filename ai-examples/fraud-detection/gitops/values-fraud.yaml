@@ -44,6 +44,7 @@ dataconnections:
 pipeline:
   # enable / diable pipeline
   enabled: true
+  #dspa
   name: pipeline-one  
   dataconnection:
     data:
@@ -52,4 +53,10 @@ pipeline:
       AWS_S3_BUCKET: pipeline-one
       AWS_S3_ENDPOINT: minio.minio.svc.cluster.local
       AWS_SECRET_ACCESS_KEY: minio123 #from create-root-user-job.yaml MINIO_ROOT_PASSWORD   
-      scheme: http  
+      scheme: http
+  #Tekton pipeline
+  repo: https://github.com/davidseve/mlops.git
+  revision: main
+  gitSslVerify: true
+  pipelinePath: ai-example/fraud-detection/pipeline
+  pythonPipelineName: get_data_train_upload.py

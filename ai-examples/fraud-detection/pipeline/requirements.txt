@@ -1,0 +1,10 @@
+kfp[kubernetes]
+boto3
+botocore
+onnx
+onnxruntime
+# If you don't do this... numpy 2.0 will be installed and it's not compatible with onnxruntime
+numpy==1.24.3; python_version<"3.12"
+numpy==1.26.0; python_version>="3.12"
+pandas==2.2.2
+kubernetes

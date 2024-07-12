@@ -1,0 +1,60 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: pipeline-{{ .Values.pipeline.name }}
+  namespace: {{ $.Values.project.name }}
+spec:
+  params:
+    # - name: APP_NAME
+    #   type: string
+    #   default: "{{ .Values.modelDeploymentUploadTektonPipelineName }}"
+    # - name: GIT_PROVIDER
+    #   type: string
+    #   default: github
+    - name: GIT_REPO
+      type: string
+      default: "{{ .Values.pipeline.repo }}"
+    - name: GIT_REVISION
+      type: string
+      default: "{{ .Values.pipeline.revision }}"
+    - name: GIT_SSL_VERIFY
+      type: string
+      default: '{{ .Values.pipeline.gitSslVerify }}'
+  tasks:
+    - name: fetch-repository
+      params:
+        - name: url
+          value: $(params.GIT_REPO)
+        - name: revision
+          value: $(params.GIT_REVISION)
+        - name: deleteExisting
+          value: 'true'
+        - name: sslVerify
+          value: $(params.GIT_SSL_VERIFY)
+      taskRef:
+        kind: ClusterTask
+        name: git-clone
+      workspaces:
+        - name: output
+          workspace: workspace-source
+    - name: kfp-upload
+      runAfter:
+        - fetch-repository
+      params:
+        - name: TASK_IMAGE
+          value: quay.io/modh/runtime-images:runtime-cuda-tensorflow-ubi9-python-3.9-2023b-20240301
+        - name: PYTHON_PIPELINE_NAME
+          value: {{ .Values.pipeline.pythonPipelineName }}
+        - name: REQUIREMENTS_FILE
+          value: requirements.txt
+        - name: PIPELINES_PATH
+          value: {{ .Values.pipeline.pipelinePath }}
+      taskRef:
+        kind: Task
+        name: kfp-upload
+      workspaces:
+        - name: source
+          workspace: workspace-source
+  workspaces:
+    - name: workspace-source
+

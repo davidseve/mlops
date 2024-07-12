@@ -11,7 +11,7 @@ from kfp import kubernetes
 def get_data(data_output_path: OutputPath()):
     import urllib.request
     print("starting download...")
-    url = "https://raw.githubusercontent.com/rh-aiservices-bu/fraud-detection/main/data/card_transdata.csv"
+    url = "https://raw.githubusercontent.com/davidseve/mlops/main/ai-examples/fraud-detection/data/card_transdata.csv"
     urllib.request.urlretrieve(url, data_output_path)
     print("done")
 
@@ -154,7 +154,7 @@ def pipeline():
 
     kubernetes.use_secret_as_env(
         task=upload_model_task,
-        secret_name='aws-connection-my-storage',
+        secret_name='pipeline-one', #TODO this should be a parameter from the pipeline
         secret_key_to_env={
             'AWS_ACCESS_KEY_ID': 'AWS_ACCESS_KEY_ID',
             'AWS_SECRET_ACCESS_KEY': 'AWS_SECRET_ACCESS_KEY',
