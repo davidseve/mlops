@@ -1,3 +1,4 @@
+{{- if .Values.pipeline.enabled }}
 apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
@@ -69,3 +70,4 @@ spec:
   workspaces:
     - mountPath: /workspace/source
       name: source
+{{- end }}
