@@ -20,7 +20,7 @@ waitoperatorpod() {
 set -x
 PATH=${PWD}/bin/:$PATH
 
-#increase-ms-count.sh 2
+increase-ms-count.sh 2
 
 # install openshift-gitops operator resources
 oc get argocd -n openshift-gitops openshift-gitops &>/dev/null

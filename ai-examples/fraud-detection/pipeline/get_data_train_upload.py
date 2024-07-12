@@ -240,7 +240,7 @@ if __name__ == '__main__':
         if not kfp_endpoint.startswith("http"):
             kfp_endpoint = f"https://{kfp_endpoint}"
 
-        client = kfp.Client(host=kfp_endpoint, existing_token=token, ssl_ca_cert="/var/run/secrets/kubernetes.io/serviceaccount/sa.crt",)
+        client = kfp.Client(host=kfp_endpoint, existing_token=token, ssl_ca_cert="/var/run/secrets/kubernetes.io/serviceaccount/ca.crt",)
 
         try:
             # Get the pipeline by name
