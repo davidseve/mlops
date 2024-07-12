@@ -66,7 +66,7 @@ spec:
 
         echo "NAMESPACE_NAME: $NAMESPACE_NAME PIPELINE_NAME: $PIPELINE_NAME TOKEN: $TOKEN"
 
-        python $(params.PIPELINE_NAME).py
+        python $(params.PIPELINE_NAME).py $TOKEN
   workspaces:
     - mountPath: /workspace/source
       name: source

@@ -3,7 +3,7 @@
 apiVersion: datasciencepipelinesapplications.opendatahub.io/v1alpha1
 kind: DataSciencePipelinesApplication
 metadata:
-  name: dspa-{{ .Values.pipeline.name }}
+  name: dspa
   namespace: {{ $.Values.project.name }}
   # annotations:
   #   argocd.argoproj.io/compare-options: IgnoreExtraneous
