@@ -125,7 +125,7 @@ def upload_model(input_model_path: InputPath()):
 
     aws_access_key_id = os.environ.get('AWS_ACCESS_KEY_ID')
     aws_secret_access_key = os.environ.get('AWS_SECRET_ACCESS_KEY')
-    endpoint_url = os.environ.get('AWS_S3_ENDPOINT')
+    endpoint_url = "http://minio:9000" #TODO
     region_name = os.environ.get('AWS_DEFAULT_REGION')
     bucket_name = os.environ.get('AWS_S3_BUCKET')
 
