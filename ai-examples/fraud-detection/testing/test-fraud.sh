@@ -16,3 +16,7 @@ while [[ "${status}" != "Healthy" ]]; do
 done
 
 ../../../bootstrap/ns-pods-running.sh $namespace
+
+sleep 10
+
+oc create -f kfp-upload-pipelinerun.yaml
