@@ -169,6 +169,29 @@ def pipeline():
             'AWS_S3_ENDPOINT': 'AWS_S3_ENDPOINT',
         })
 
+def get_pipeline_by_name(client: kfp.Client, pipeline_name: str):
+    import json
+
+    # Define filter predicates
+    filter_spec = json.dumps({
+        "predicates": [{
+            "key": "display_name",
+            "operation": "EQUALS",
+            "stringValue": pipeline_name,
+        }]
+    })
+
+    # List pipelines with the specified filter
+    pipelines = client.list_pipelines(filter=filter_spec)
+
+    if not pipelines.pipelines:
+        return None
+    for pipeline in pipelines.pipelines:
+        if pipeline.display_name == pipeline_name:
+            return pipeline
+
+    return None
+    
 # Get the service account token or return None
 def get_token():
     try:
