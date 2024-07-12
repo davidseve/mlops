@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
-  name: pipeline-{{ .Values.pipeline.name }}
+  name: pipeline-upload-{{ .Values.pipeline.name }}
   namespace: {{ $.Values.project.name }}
 spec:
   params:
@@ -57,4 +57,18 @@ spec:
           workspace: workspace-source
   workspaces:
     - name: workspace-source
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: pipeline-upload-{{ .Values.pipeline.name }}-source-pvc
+  namespace: {{ $.Values.project.name }}
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.pipeline.sourceWorkspaceSize }}
+{{- end }}
+
 

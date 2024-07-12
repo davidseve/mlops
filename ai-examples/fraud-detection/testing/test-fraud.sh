@@ -1,7 +1,7 @@
 
 #!/bin/bash
 
-appfile=../gitops/fraud-example/app-ai-fraud.yaml 
+appfile=../gitops/app-ai-fraud.yaml 
 appname=ai-fraud-example
 workbench=workbench-one
 namespace=fraud
@@ -15,19 +15,4 @@ while [[ "${status}" != "Healthy" ]]; do
   status=$(oc get application.argoproj.io $appname -n openshift-gitops -o jsonpath='{ .status.health.status }')
 done
 
-
-containerState=$(oc get notebook $workbench -n $namespace -o jsonpath='{ .status.containerState }')
-echo $containerState
-VALID=$(echo $containerState | jq -e '.running' 2>/dev/null)
-
-if [ $? -ne 0 ]; then
-  echo "Invalid JSON format or 'running' field not found"
-  exit 1
-fi
-
-while [ $? -ne 0 ]
-do 
-    echo "Waiting ${x} times for notebook $workbench -n $namespace" $(( x++ ))
-    sleep 2 
-    test=$(oc get po -n ${2} | grep ${1})
-done
+../../../bootstrap/ns-pods-running.sh $namespace

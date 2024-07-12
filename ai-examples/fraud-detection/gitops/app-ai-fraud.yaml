@@ -14,7 +14,7 @@ spec:
     targetRevision: HEAD
     helm:
       valueFiles:
-      - ../../gitops/fraud-example/values-fraud.yaml  
+      - ../../fraud-detection/gitops/values-fraud.yaml  
   syncPolicy:
     automated:
       prune: true

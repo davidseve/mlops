@@ -60,3 +60,4 @@ pipeline:
   gitSslVerify: true
   pipelinePath: ai-example/fraud-detection/pipeline
   pythonPipelineName: get_data_train_upload.py
+  sourceWorkspaceSize: 2Gi
