@@ -236,11 +236,11 @@ if __name__ == '__main__':
 
     # If both kfp_endpoint and token are provided, upload the pipeline
     if kfp_endpoint and token:
-        client = kfp.Client(host=kfp_endpoint, existing_token=token, ssl_ca_cert=None,)
-
         # If endpoint doesn't have a protocol (http or https), add https
         if not kfp_endpoint.startswith("http"):
             kfp_endpoint = f"https://{kfp_endpoint}"
+            
+        client = kfp.Client(host=kfp_endpoint, existing_token=token, ssl_ca_cert=None,)
 
         try:
             # Get the pipeline by name
