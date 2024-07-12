@@ -191,7 +191,7 @@ def get_pipeline_by_name(client: kfp.Client, pipeline_name: str):
             return pipeline
 
     return None
-    
+
 # Get the service account token or return None
 def get_token():
     try:
@@ -237,9 +237,11 @@ def get_route_host(route_name: str):
 if __name__ == '__main__':
     import time
 
+    pipeline_package_path = __file__.replace('.py', '.yaml')
+
     compiler.Compiler().compile(
         pipeline_func=pipeline,
-        package_path=__file__.replace('.py', '.yaml')
+        package_path=pipeline_package_path
     )
 
     # Take token and kfp_endpoint as optional command-line arguments
