@@ -19,7 +19,7 @@ spec:
         - -ec
         - |-
           if [ -n "$(oc get pipelinerun {{ $.Values.project.name }} -oname 2>/dev/null)" ]; then
-            cat <<EOF | oc apply -f -
+            cat << EOF | oc apply -f-
             apiVersion: tekton.dev/v1
             kind: PipelineRun
             metadata:
