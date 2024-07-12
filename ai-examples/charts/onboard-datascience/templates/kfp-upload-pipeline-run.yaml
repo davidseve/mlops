@@ -27,11 +27,11 @@ spec:
                 namespace: {{ $.Values.project.name }}
             spec:
                 pipelineRef:
-                    name: pipeline-upload-{{ .Values.pipeline.name }}
+                  name: pipeline-upload-{{ .Values.pipeline.name }}
                 workspaces:
-                    - name: workspace-source
-                    persistentVolumeClaim:
-                        claimName: pipeline-upload-{{ .Values.pipeline.name }}-source-pvc
+                - name: workspace-source
+                  persistentVolumeClaim:
+                    claimName: pipeline-upload-{{ .Values.pipeline.name }}-source-pvc
             EOF
           fi
       restartPolicy: Never
