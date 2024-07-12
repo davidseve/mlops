@@ -11,28 +11,29 @@ spec:
   template:
     spec:
       containers:
-      - name: kubectl
-        image: bitnami/kubectl:latest
-        command:
-          - sh
-          - -c
-          - |
-            if ! kubectl get pipelinerun -n my-namespace; then
-                cat <<EOF | kubectl apply -f -
-                apiVersion: tekton.dev/v1
-                kind: PipelineRun
-                metadata:
-                    generateName: pipelinerun-upload-{{ .Values.pipeline.name }}
-                    namespace: {{ $.Values.project.name }}
-                spec:
-                    pipelineRef:
-                        name: pipeline-upload-{{ .Values.pipeline.name }}
-                    workspaces:
-                        - name: workspace-source
-                        persistentVolumeClaim:
-                            claimName: pipeline-upload-{{ .Values.pipeline.name }}-source-pvc
-                EOF
-            fi
+      - name: pipelinerun
+        image: registry.redhat.io/openshift4/ose-tools-rhel8:v4.14
+        imagePullPolicy: IfNotPresent        
+        command: ["/bin/bash"]
+        args:
+        - -ec
+        - |-
+          if [ -n "$(oc get pipelinerun {{ $.Values.project.name }} -oname 2>/dev/null)" ]; then
+            cat <<EOF | oc apply -f -
+            apiVersion: tekton.dev/v1
+            kind: PipelineRun
+            metadata:
+                generateName: pipelinerun-upload-{{ .Values.pipeline.name }}
+                namespace: {{ $.Values.project.name }}
+            spec:
+                pipelineRef:
+                    name: pipeline-upload-{{ .Values.pipeline.name }}
+                workspaces:
+                    - name: workspace-source
+                    persistentVolumeClaim:
+                        claimName: pipeline-upload-{{ .Values.pipeline.name }}-source-pvc
+            EOF
+          fi
       restartPolicy: Never
   backoffLimit: 1
 {{- end }}
