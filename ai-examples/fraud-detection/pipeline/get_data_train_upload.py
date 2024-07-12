@@ -2,9 +2,11 @@ import os
 import re
 import sys
 
+import kfp
+
 from kfp import compiler
 from kfp import dsl
-from kfp.dsl import InputPath, OutputPath
+from kfp.dsl import Input, Output, Dataset, Model, Metrics, OutputPath
 
 from kfp import kubernetes
 
@@ -210,6 +212,8 @@ def get_route_host(route_name: str):
         return None
 
 if __name__ == '__main__':
+    import time
+
     compiler.Compiler().compile(
         pipeline_func=pipeline,
         package_path=__file__.replace('.py', '.yaml')
