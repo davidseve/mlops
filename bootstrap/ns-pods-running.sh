@@ -19,7 +19,7 @@ while true; do
     status=$(kubectl get pod $pod -n $NAMESPACE -o jsonpath='{.status.phase}')
     
     # Check if the status is Running
-    if [ "$status" != "Running" ] && [ "$status" != "Completed" ]; then
+    if [ "$status" != "Running" ] && [ "$status" != "Completed" ] && [ "$status" != "Succeeded" ]; then
       echo "Pod $pod is not in Running state, current state: $status"
       all_running=false
       all_running2=false
