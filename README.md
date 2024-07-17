@@ -2,7 +2,8 @@
 
 oc login
 
-./bootstrap/bootstrap.sh
+cd bootstrap
+./bootstrap.sh
 
 TODO if needed
 To add Authorino as an authorization provider so that you can enable token authorization for deployed models, you have installed the Red Hat - Authorino Operator. See Installing the Authorino Operator.
@@ -21,8 +22,10 @@ https://github.com/alpha-hack-program/doc-bot/blob/main/bootstrap/hf-creds.sh
 ## Validate dsc
 oc get deployments -n redhat-ods-applications
 
-## Create ai fraud project
-oc apply -f ai-examples/gitops/fraud-example/app-ai-fraud.yaml 
+## Create ai fraud detection example
+
+cd ../ai-examples/fraud-detection
+./test-fraud.sh
 
 
 

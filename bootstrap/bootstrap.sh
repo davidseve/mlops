@@ -52,7 +52,7 @@ if [[ $? -eq 1 ]]; then
 fi
 
 # apply resources
-oc apply -f ./bootstrap/gitops/appofapp-char.yaml
+oc apply -f ./gitops/appofapp-char.yaml
 sleep 30
 
 # wait until argocd-app-of-app is available
@@ -62,9 +62,9 @@ while [[ "${status}" != "Healthy" ]]; do
   status=$(oc get application.argoproj.io argocd-app-of-app -n openshift-gitops -o jsonpath='{ .status.health.status }')
 done
 
-sleep 30 # for redhat-ods-applications
+sleep 1 # for redhat-ods-applications
 # wait until redhat-ods-applications are running
-./bootstrap/ns-pods-running.sh redhat-ods-applications
+./ns-pods-running.sh redhat-ods-applications
 
 echo "ArgoCD route:"
 printf "https://$(oc get route -n openshift-gitops openshift-gitops-server -o jsonpath='{.spec.host}')\n\n"

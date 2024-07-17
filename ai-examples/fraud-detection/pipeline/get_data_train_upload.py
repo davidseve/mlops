@@ -131,7 +131,7 @@ def upload_model(input_model_path: InputPath()):
 
     s3_key = os.environ.get("S3_KEY")
 
-    print(f"Uploading {input_model.path} to {s3_key} in {bucket_name} bucket in {endpoint_url} endpoint")
+    print(f"Uploading {input_model_path} to {s3_key} in {bucket_name} bucket in {endpoint_url} endpoint")
 
     session = boto3.session.Session(aws_access_key_id=aws_access_key_id,
                                     aws_secret_access_key=aws_secret_access_key)

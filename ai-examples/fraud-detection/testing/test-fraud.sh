@@ -20,3 +20,8 @@ done
 sleep 10
 
 oc create -f kfp-upload-pipelinerun.yaml
+
+# TODO validate pipeline is upload, I do not know which is the object that is created
+
+# TODO execute AI pipeline
+ ../../testing/ns-workflows-running.sh $namespace
