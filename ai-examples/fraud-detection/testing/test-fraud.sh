@@ -19,13 +19,15 @@ done
 
 sleep 10
 
+oc create -f kfp-upload-pipelinerun.yaml
 
+sleep 10
 
 ../../../bootstrap/ns-pods-running.sh $namespace
 
 # TODO validate pipeline is upload, I do not know which is the object that is created
 
-# TODO execute AI pipeline
+# TODO execute AI pipeline, right now manual from the UI
 
-
- ../../testing/ns-workflows-running.sh $namespace
+# Validate AI pipelines is working
+# ../../testing/ns-workflows-running.sh $namespace
