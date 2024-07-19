@@ -1,0 +1,13 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: pipeline-get-pipelines
+  namespace: fraud
+spec:
+  tasks:
+    - name: kfp-get-pipelines
+      taskRef:
+        kind: Task
+        name: kfp-get-pipelines
+
+

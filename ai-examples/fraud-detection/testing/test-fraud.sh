@@ -15,20 +15,20 @@ while [[ "${status}" != "Healthy" ]]; do
   status=$(oc get application.argoproj.io $appname -n openshift-gitops -o jsonpath='{ .status.health.status }')
 done
 
-../../../bootstrap/ns-pods-running.sh $namespace
+
+sleep 30
+
+tkn pipeline start pipeline-upload-pipeline-one --workspace name=workspace-source,claimName=pipeline-upload-pipeline-one-source-pvc -n $namespace --showlog --use-param-defaults
 
 sleep 10
-
-oc create -f kfp-upload-pipelinerun.yaml
-
-sleep 10
-
-../../../bootstrap/ns-pods-running.sh $namespace
 
 # TODO validate pipeline is upload, we can check it in S3
-host=$(oc get route -n $namespace ds-pipeline-dspa -o jsonpath='{.spec.host}')
+cd kfp
+oc apply -f kfp-get-pipelines-task.yaml
+oc apply -f kfp-get-pipelines-pipeline.yaml
+tkn pipeline start pipeline-get-pipelines -n $namespace --showlog
 
-# TODO execute AI pipeline, right now manual from the UI
+# TODO execute AI pipeline, right now manual from the UI, create a task with a python script that execute the pipeline
 
 # Validate AI pipelines is working
 # ../../testing/ns-workflows-running.sh $namespace
