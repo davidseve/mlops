@@ -25,7 +25,8 @@ sleep 10
 
 ../../../bootstrap/ns-pods-running.sh $namespace
 
-# TODO validate pipeline is upload, I do not know which is the object that is created
+# TODO validate pipeline is upload, we can check it in S3
+host=$(oc get route -n $namespace ds-pipeline-dspa -o jsonpath='{.spec.host}')
 
 # TODO execute AI pipeline, right now manual from the UI
 
