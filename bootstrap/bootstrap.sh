@@ -31,7 +31,7 @@ if [[ $? -eq 1 ]]; then
   oc -n openshift-gitops-operator delete installplan --all
 
   # create resources
-  oc apply -f bootstrap/argocd-installation.yaml
+  oc apply -f argocd-installation.yaml
   # approve new installplan
   sleep 1m
 
@@ -65,7 +65,10 @@ done
 sleep 1 # for redhat-ods-applications
 # wait until redhat-ods-applications are running
 ./ns-pods-running.sh redhat-ods-applications
-
+sleep 30
+./ns-pods-running.sh redhat-ods-applications
+sleep 30
+./ns-pods-running.sh redhat-ods-applications
 echo "ArgoCD route:"
 printf "https://$(oc get route -n openshift-gitops openshift-gitops-server -o jsonpath='{.spec.host}')\n\n"
 
@@ -74,3 +77,8 @@ oc extract secret/openshift-gitops-cluster -n openshift-gitops --to=-
 
 echo "RHAI dashboard:"
 printf "https://$(oc get route -n redhat-ods-applications rhods-dashboard -o jsonpath='{.spec.host}')\n\n"
+
+#Execute Fraud detection example
+sleep 1
+cd ../ai-examples/fraud-detection/testing
+./test-fraud.sh

@@ -24,28 +24,12 @@ oc get deployments -n redhat-ods-applications
 
 ## Create ai fraud detection example
 
-cd ../ai-examples/fraud-detection
+cd ../ai-examples/fraud-detection/testing
 ./test-fraud.sh
 
+TODO check s3 hay second pipeline execution do nothing, but when the pipeline is deleted (not just archived) it is executed again
 
-
-
-## Enabling data science pipelines
-TODO 
-https://github.com/alpha-hack-program/sagemaker-rhoai/tree/main
-
-
-Trevor Royer
-  1 minute ago
-Example tekton pipeline here:
-https://github.com/redhat-ai-services/ai-accelerator/tree/main/tenants/ai-example/dsp-example-pipeline/base
-The kfp pipeline that it is triggering can be found here:
-https://github.com/redhat-ai-services/kubeflow-pipelines-examples/blob/main/pipelines/11_iris_training_pipeline.py
-The if __name__ == "__main__": section at the bottom is all of the magic sauce to authenticate to the dsp api and line 255 is the piece that triggers the run.
-
-https://rh-aiservices-bu.github.io/fraud-detection/fraud-detection-workshop/running-a-pipeline-generated-from-python-code.html
-https://github.com/rh-aiservices-bu/fraud-detection/blob/53da9bc16ee64c39d4eaa620952a25ea157b118f/7_get_data_train_upload.yaml
-
+## Create data science pipelines
 
 ## Deleting a workbench from a data science project
 

@@ -9,6 +9,12 @@ delete_subscription(){
 set -x
 PATH=${PWD}/bin/:$PATH
 
+#Delete Fraud detection example
+cd ../ai-examples/fraud-detection/testing
+./delete-fraud.sh
+sleep 1
+
+cd ../../../bootstrap
 argocd login --core
 oc project openshift-gitops
 
