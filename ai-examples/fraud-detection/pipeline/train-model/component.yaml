@@ -1,0 +1,15 @@
+name: Train Fraud Detection Model
+description: Component for train fread detection model
+inputs:
+  - {name: data_input_path, type: String, default: '', description: 'Path to card transdata csv'}
+outputs:
+  - {name: model_output_path, type: String, description: 'path to ONNX Train Fraud Detection Model'}
+implementation:
+  container:
+    image: quay.io/aipipeline/kserve-component:v0.12.0
+    command: ['python']
+    args: [
+      /pipelines/component/src/train_model.py,
+      --data_input_path, {inputPath: data_input_path},
+      --model_output_path, {outputPath: model_output_path}
+    ]
