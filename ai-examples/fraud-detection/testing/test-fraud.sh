@@ -22,15 +22,7 @@ tkn pipeline start pipeline-upload-pipeline-one --workspace name=workspace-sourc
 
 sleep 10
 
-# validate pipeline is upload
-cd kfp
-oc apply -f kfp-get-pipelines-task.yaml
-oc apply -f kfp-get-pipelines-pipeline.yaml
-tkn pipeline start pipeline-get-pipelines -n $namespace --showlog
-
-# TODO execute AI pipeline, right now manual from the UI, create a task with a python script that execute the pipeline
+# Run pipeline
 oc apply -f kfp-run-pipelines-task.yaml
 oc apply -f kfp-run-pipelines-pipeline.yaml
 tkn pipeline start pipeline-run-pipelines -n $namespace --showlog
-# Validate AI pipelines is working
-# ../../testing/ns-workflows-running.sh $namespace

@@ -1,9 +1,9 @@
 name: Train Fraud Detection Model
 description: Component for train fread detection model
 inputs:
-  - {name: data_input_path, type: system.Artifact@0.0.1, default: '', description: 'Path to card transdata csv'}
+  - {name: data_input_path, type: InputPath, default: '', description: 'Path to card transdata csv'}
 outputs:
-  - {name: model_output_path, type: system.Artifact@0.0.1, description: 'path to ONNX Train Fraud Detection Model'}
+  - {name: model_output_path, type: OutputPath, description: 'path to ONNX Train Fraud Detection Model'}
 implementation:
   container:
     image: quay.io/aipipeline/kserve-component:v0.12.0
