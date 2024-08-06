@@ -5,7 +5,7 @@ import sys
 import kfp
 
 from kfp import compiler
-from kfp import dsl
+from kfp import dsl, components
 from kfp.dsl import Input, Output, Dataset, Model, Metrics, InputPath, OutputPath
 
 from kfp import kubernetes
