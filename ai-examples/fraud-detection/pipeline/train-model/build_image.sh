@@ -7,3 +7,4 @@ cp ../../data/card_transdata.csv card_transdata.csv
 cd "$(dirname "$0")" 
 podman build -t "${full_image_name}" .
 rm card_transdata.csv
+podman push "$full_image_name"
