@@ -21,7 +21,7 @@ def get_data(data_output_path: OutputPath()):
     print("done")
 
 train_model = components.load_component_from_url(
-    'https://raw.githubusercontent.com/kubeflow/pipelines/e3337b8bdcd63636934954e592d4b32c95b49129/components/datasets/Chicago%20Taxi/component.yaml'
+    'https://raw.githubusercontent.com/davidseve/mlops/main/ai-examples/fraud-detection/pipeline/train-model/component.yaml'
 )
 
 @dsl.component(
