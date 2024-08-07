@@ -18,7 +18,6 @@ parser = argparse.ArgumentParser(description='Train Model')
 # Paths must be passed in, not hardcoded
 parser.add_argument('--data_input_path', type=str,
   help='Path of the local file containing the Input 1 data.')
-#TODO it is neccesary?
 parser.add_argument('--model_output_path', type=str,
   help='Path of the local file where the Output 1 data should be written.')
 args = parser.parse_args()
@@ -98,7 +97,6 @@ history = model.fit(X_train, y_train, epochs=epochs, \
                     verbose = True, class_weight = class_weights)
 
 # Save the model as ONNX for easy use of ModelMesh
-
 model_proto, _ = tf2onnx.convert.from_keras(model)
 print(args.model_output_path)
 onnx.save(model_proto, args.model_output_path)

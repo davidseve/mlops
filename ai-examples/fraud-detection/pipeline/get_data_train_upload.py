@@ -68,11 +68,11 @@ def pipeline():
 
     upload_model_task = upload_model(input_model_path=onnx_file)
 
-    upload_model_task.set_env_variable(name="S3_KEY", value="models/fraud/1/model.onnx")
+    upload_model_task.set_env_variable(name="S3_KEY", value="models/fraud/1/model.onnx") #TODO manage here Model versioning
 
     kubernetes.use_secret_as_env(
         task=upload_model_task,
-        secret_name='pipeline-one', #TODO this should be a parameter from the pipeline
+        secret_name='dataconnection-one', #TODO this should be a parameter from the pipeline
         secret_key_to_env={
             'AWS_ACCESS_KEY_ID': 'AWS_ACCESS_KEY_ID',
             'AWS_SECRET_ACCESS_KEY': 'AWS_SECRET_ACCESS_KEY',
