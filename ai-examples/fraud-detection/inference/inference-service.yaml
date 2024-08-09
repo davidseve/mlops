@@ -29,8 +29,6 @@ spec:
           memory: 4Gi
       runtime: seve
       storage:
-        key: dataconnection-one
-        path: models/fraud/1/model.onnx
-        parameters:
-          port: "9000"       
+        key: dataconnection-one #Minio has to have port 80 becuase port parameter here do not work
+        path: models/fraud/1/model.onnx  
 

@@ -10,7 +10,7 @@ metadata:
 spec:
   ports:
   - name: api
-    port: 80
+    port: 80 #In InferenceService can not define port
     targetPort: api
   - name: console
     port: 9090
