@@ -10,7 +10,7 @@ metadata:
 spec:
   ports:
   - name: api
-    port: 9000
+    port: 80
     targetPort: api
   - name: console
     port: 9090
