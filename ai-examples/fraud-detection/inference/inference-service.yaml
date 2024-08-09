@@ -6,7 +6,7 @@ metadata:
     serving.knative.openshift.io/enablePassthrough: 'true'
     sidecar.istio.io/inject: 'true'
     sidecar.istio.io/rewriteAppHTTPProbers: 'true'
-    #TODO if necessary serving.kserve.io/storage-initializer-uid: "1000810001" # https://github.com/kserve/kserve/blob/master/docs/OPENSHIFT_GUIDE.md#with-service-mesh-istio
+    serving.kserve.io/storage-initializer-uid: "1000970001" # https://github.com/kserve/kserve/blob/master/docs/OPENSHIFT_GUIDE.md#with-service-mesh-istio
   name: fraud-inference
   namespace: fraud
   labels:
@@ -19,7 +19,6 @@ spec:
       modelFormat:
         name: onnx
         version: '1'
-      name: ''
       resources:
         limits:
           cpu: '2'
