@@ -20,9 +20,6 @@ def get_data(data_output_path: OutputPath()):
     urllib.request.urlretrieve(url, data_output_path)
     print("done")
 
-train_model = components.load_component_from_url(
-    'https://raw.githubusercontent.com/davidseve/mlops/main/ai-examples/fraud-detection/pipeline/train-model/component.yaml'
-)
 
 @dsl.component(
     base_image="quay.io/modh/runtime-images:runtime-cuda-tensorflow-ubi9-python-3.9-2023b-20240301",
@@ -63,6 +60,12 @@ def pipeline():
     get_data_task = get_data()
     csv_file = get_data_task.outputs["data_output_path"]
     # csv_file = get_data_task.output
+
+
+    train_model = components.load_component_from_url(
+        'https://raw.githubusercontent.com/davidseve/mlops/main/ai-examples/fraud-detection/pipeline/train-model/component.yaml'
+    )
+
     train_model_task = train_model(data_input_path=csv_file)
     onnx_file = train_model_task.outputs["model_output_path"]
 
