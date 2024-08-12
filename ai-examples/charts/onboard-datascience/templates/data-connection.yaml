@@ -15,7 +15,7 @@ stringData:
   AWS_ACCESS_KEY_ID: {{ .data.AWS_ACCESS_KEY_ID }}
   AWS_DEFAULT_REGION: {{ .data.AWS_DEFAULT_REGION }}
   AWS_S3_BUCKET: {{ .data.AWS_S3_BUCKET }}
-  AWS_S3_ENDPOINT: {{ .data.AWS_S3_ENDPOINT }}
+  AWS_S3_ENDPOINT: {{ printf "%s://%s" .data.scheme .data.AWS_S3_ENDPOINT }}
   AWS_SECRET_ACCESS_KEY: {{ .data.AWS_SECRET_ACCESS_KEY }}
 type: Opaque
 {{ end }}
@@ -38,7 +38,7 @@ stringData:
   AWS_ACCESS_KEY_ID: {{ .dataconnection.data.AWS_ACCESS_KEY_ID }}
   AWS_DEFAULT_REGION: {{ .dataconnection.data.AWS_DEFAULT_REGION }}
   AWS_S3_BUCKET: {{ .dataconnection.data.AWS_S3_BUCKET }}
-  AWS_S3_ENDPOINT: {{ .dataconnection.data.AWS_S3_ENDPOINT }}
+  AWS_S3_ENDPOINT: {{ printf "%s://%s" .dataconnection.data.scheme .dataconnection.data.AWS_S3_ENDPOINT }}
   AWS_SECRET_ACCESS_KEY: {{ .dataconnection.data.AWS_SECRET_ACCESS_KEY }}
 type: Opaque
 {{ end }}
