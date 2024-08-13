@@ -1,0 +1,32 @@
+
+{{- if .Values.pipeline.enabled }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: job-pipelinerun-upload-{{ .Values.pipeline.name }}
+  namespace: {{ $.Values.project.name }}
+  annotations:
+    argocd.argoproj.io/sync-wave: "10"
+spec:
+  template:
+    spec:
+      containers:
+      - name: pipelinerun
+        image: registry.redhat.io/openshift4/ose-tools-rhel8:v4.14
+        imagePullPolicy: IfNotPresent        
+        command: ["/bin/bash"]
+        args:
+        - -ec
+        - |-
+          if [ -n "$(oc get pipelinerun {{ $.Values.project.name }} -oname 2>/dev/null)" ]; then
+            tkn pipeline start pipeline-upload-{{ .Values.pipeline.name }} --workspace name=workspace-source,claimName=pipeline-upload-{{ .Values.pipeline.name }}-source-pvc -n $namespace --showlog --use-param-defaults
+
+            sleep 10
+
+            # Run pipeline
+            tkn pipeline start pipeline-run-{{ .Values.pipeline.name }} -n $namespace --showlog
+          fi
+      restartPolicy: Never
+  backoffLimit: 1
+{{- end }}
+

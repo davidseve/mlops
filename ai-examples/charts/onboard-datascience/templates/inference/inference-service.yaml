@@ -5,6 +5,7 @@ apiVersion: serving.kserve.io/v1beta1
 kind: InferenceService
 metadata:
   annotations:
+    argocd.argoproj.io/sync-wave: "20"
     openshift.io/display-name: {{ $notebook.name }}-inference
     serving.knative.openshift.io/enablePassthrough: 'true'
     sidecar.istio.io/inject: 'true'
