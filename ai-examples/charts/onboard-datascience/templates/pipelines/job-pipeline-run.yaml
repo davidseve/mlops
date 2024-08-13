@@ -55,9 +55,9 @@ spec:
         - |-
           NAMESPACE="{{ $.Values.project.name }}"
           LABEL="initial-pipeline-run=true"
-          sleep 30
           # Check if there is a pod with the specified label in the specified namespace
           if ! oc get pods -n "$NAMESPACE" -l "$LABEL" -l pipeline-upload=pipeline-one --no-headers | grep -q '^'; then
+              sleep 30
               cat <<EOF | oc create -f -
               apiVersion: tekton.dev/v1
               kind: PipelineRun

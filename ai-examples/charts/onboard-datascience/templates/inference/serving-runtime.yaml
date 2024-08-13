@@ -1,5 +1,3 @@
-{{ range $notebook := $.Values.notebooks }}
-{{- if $notebook.enabled }}
 apiVersion: serving.kserve.io/v1alpha1
 kind: ServingRuntime
 metadata:
@@ -10,8 +8,8 @@ metadata:
     opendatahub.io/recommended-accelerators: '["nvidia.com/gpu"]'
     opendatahub.io/template-display-name: OpenVINO Model Server
     opendatahub.io/template-name: kserve-ovms
-    openshift.io/display-name: {{ $notebook.name }}-inference-runtime
-  name: {{ $notebook.name }}-inference-runtime
+    openshift.io/display-name: {{ $.Values.project.name }}-inference-runtime
+  name: {{ $.Values.project.name }}-inference-runtime
   namespace: {{ $.Values.project.name }}
   labels:
     opendatahub.io/dashboard: 'true'
@@ -65,5 +63,3 @@ spec:
         medium: Memory
         sizeLimit: 2Gi
       name: shm
-{{- end }}
-{{- end }}

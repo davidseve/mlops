@@ -3,11 +3,11 @@ user: kubeadmin
 clusterURL: https://rhods-dashboard-redhat-ods-applications.apps.cluster-87xpx.87xpx.sandbox1137.opentlc.com
 project:
   # name of the data scienece project
-  name: fraud
+  name: fraud-mult
   # true if project doesn't exist now
   autocreate: true
 inferencedataconnections: dataconnection-one
-multimodel: false
+multimodel: true
 notebooks:
   - notebook-one:
     enabled: true
