@@ -4,14 +4,14 @@
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: pod-lister
+  name: job-pipeline-run
   namespace: {{ $.Values.project.name }}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
   namespace: {{ $.Values.project.name }}
-  name: pod-lister-role
+  name: job-pipeline-run-role
 rules:
 - apiGroups: [""]
   resources: ["pods"]
@@ -23,15 +23,15 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: pod-lister-binding
+  name: job-pipeline-run-binding
   namespace: {{ $.Values.project.name }}
 subjects:
 - kind: ServiceAccount
-  name: pod-lister
+  name: job-pipeline-run
   namespace: {{ $.Values.project.name }}
 roleRef:
   kind: Role
-  name: pod-lister-role
+  name: job-pipeline-run-role
   apiGroup: rbac.authorization.k8s.io
 ---
 apiVersion: batch/v1
@@ -44,7 +44,7 @@ metadata:
 spec:
   template:
     spec:
-      serviceAccountName: pod-lister
+      serviceAccountName: job-pipeline-run
       containers:
       - name: pipelinerun
         image: registry.redhat.io/openshift4/ose-tools-rhel8:v4.14
@@ -55,7 +55,7 @@ spec:
         - |-
           NAMESPACE="{{ $.Values.project.name }}"
           LABEL="initial-pipeline-run=true"
-
+          sleep 30
           # Check if there is a pod with the specified label in the specified namespace
           if ! oc get pods -n "$NAMESPACE" -l "$LABEL" -l pipeline-upload=pipeline-one --no-headers | grep -q '^'; then
               cat <<EOF | oc create -f -

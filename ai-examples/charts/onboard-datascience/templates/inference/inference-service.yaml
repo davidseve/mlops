@@ -33,6 +33,6 @@ spec:
       runtime: {{ $notebook.name }}-inference-runtime
       storage:
         key:  {{ $notebook.inferencedataconnections }}
-        path: models/{{ $notebook.name }}/1/model.onnx  #TODO play with model versions
+        path: models/fraud/1/model.onnx  #TODO play with model versions
 {{- end }}
 {{- end }}
