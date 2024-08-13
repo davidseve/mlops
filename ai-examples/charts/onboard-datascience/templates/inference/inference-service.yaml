@@ -34,4 +34,4 @@ spec:
       runtime: {{ $.Values.project.name }}-inference-runtime
       storage:
         key:  {{ .Values.inferencedataconnections }}
-        path: models/fraud/1/model.onnx  #TODO play with model versions
+        path: models/  #TODO play with model versions #Know issues https://docs.redhat.com/en/documentation/red_hat_openshift_ai_self-managed/2-latest/html-single/release_notes/index#known-issues_relnotes
