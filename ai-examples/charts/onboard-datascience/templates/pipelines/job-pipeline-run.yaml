@@ -16,6 +16,9 @@ rules:
 - apiGroups: [""]
   resources: ["pods"]
   verbs: ["list"]
+- apiGroups: ["tekton.dev"]
+  resources: ["pipelineruns"]
+  verbs: ["create", "wait", "list"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
@@ -50,21 +53,20 @@ spec:
         args:
         - -ec
         - |-
-          # Define the namespace and label
           NAMESPACE="{{ $.Values.project.name }}"
           LABEL="initial-pipeline-run=true"
 
           # Check if there is a pod with the specified label in the specified namespace
-          if ! oc get pods -n "$NAMESPACE" -l "$LABEL" --no-headers | grep -q '^'; then
-              cat <<EOF | oc apply -f -
+          if ! oc get pods -n "$NAMESPACE" -l "$LABEL" -l pipeline-upload=pipeline-one --no-headers | grep -q '^'; then
+              cat <<EOF | oc create -f -
               apiVersion: tekton.dev/v1
               kind: PipelineRun
               metadata:
                   generateName: pipeline-upload-{{ .Values.pipeline.name }}
                   namespace: {{ $.Values.project.name }}
                   labels:
-                    initial-pipeline-run: true
-                    pipeline-upload: {{ .Values.pipeline.name }}
+                    initial-pipeline-run: "true"
+                    pipeline-upload: "{{ .Values.pipeline.name }}"
               spec:
                   pipelineRef:
                     name: pipeline-upload-{{ .Values.pipeline.name }}
@@ -72,25 +74,30 @@ spec:
                   - name: workspace-source
                     persistentVolumeClaim:
                       claimName: pipeline-upload-{{ .Values.pipeline.name }}-source-pvc
-              EOF
-              oc wait --for=condition=Succeeded --timeout=1h pipelinerun -l "$LABEL" -l pipeline-upload={{ .Values.pipeline.name }} -n <namespace>
+          EOF
+          fi    
               
+          if ! oc get pods -n "$NAMESPACE" -l "$LABEL" -l pipeline-run=pipeline-one --no-headers | grep -q '^'; then            
+              oc wait --for=condition=Succeeded --timeout=1h pipelinerun -l "$LABEL" -l pipeline-upload=pipeline-one -n "$NAMESPACE"
               sleep 10
-              cat <<EOF | oc apply -f -
+              
+              cat <<EOF | oc create -f -
               apiVersion: tekton.dev/v1
               kind: PipelineRun
               metadata:
                   generateName: pipeline-run-{{ .Values.pipeline.name }}
                   namespace: {{ $.Values.project.name }}
                   labels:
-                    initial-pipeline-run: true
-                    pipeline-run: {{ .Values.pipeline.name }}
+                    initial-pipeline-run: "true"
+                    pipeline-run: "{{ .Values.pipeline.name }}"
               spec:
                   pipelineRef:
                     name: pipeline-run-{{ .Values.pipeline.name }}
-              EOF
-              oc wait --for=condition=Succeeded --timeout=1h pipelinerun -l "$LABEL" -l pipeline-run={{ .Values.pipeline.name }} -n <namespace>
+          EOF
+              
+              
           fi
+          oc wait --for=condition=Succeeded --timeout=1h pipelinerun -l "$LABEL" -l pipeline-run=pipeline-one -n "$NAMESPACE"
       restartPolicy: Never
   backoffLimit: 1
 {{- end }}
