@@ -16,13 +16,3 @@ while [[ "${status}" != "Healthy" ]]; do
 done
 
 
-sleep 30
-
-tkn pipeline start pipeline-upload-pipeline-one --workspace name=workspace-source,claimName=pipeline-upload-pipeline-one-source-pvc -n $namespace --showlog --use-param-defaults
-
-sleep 10
-
-# Run pipeline
-tkn pipeline start pipeline-run-pipelines -n $namespace --showlog
-# Validate AI pipelines is working
-# ../../testing/ns-workflows-running.sh $namespace

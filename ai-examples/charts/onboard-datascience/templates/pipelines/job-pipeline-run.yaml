@@ -18,12 +18,11 @@ spec:
         args:
         - -ec
         - |-
-          if [ -n "$(oc get pipelinerun {{ $.Values.project.name }} -oname 2>/dev/null)" ]; then
+          if [ -n "$(oc get pipeline-upload-{{ .Values.pipeline.name }} -oname 2>/dev/null)" ]; then
             tkn pipeline start pipeline-upload-{{ .Values.pipeline.name }} --workspace name=workspace-source,claimName=pipeline-upload-{{ .Values.pipeline.name }}-source-pvc -n $namespace --showlog --use-param-defaults
-
+          fi
+          if [ -n "$(oc get pipeline-run-{{ .Values.pipeline.name }} -oname 2>/dev/null)" ]; then            
             sleep 10
-
-            # Run pipeline
             tkn pipeline start pipeline-run-{{ .Values.pipeline.name }} -n $namespace --showlog
           fi
       restartPolicy: Never
