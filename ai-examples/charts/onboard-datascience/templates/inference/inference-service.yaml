@@ -1,15 +1,17 @@
+{{ range $notebook := $.Values.notebooks }}
+{{- if $notebook.enabled }}
+---
 apiVersion: serving.kserve.io/v1beta1
 kind: InferenceService
 metadata:
   annotations:
-    openshift.io/display-name: fraud-inference
+    openshift.io/display-name: {{ $notebook.name }}-inference
     serving.knative.openshift.io/enablePassthrough: 'true'
     sidecar.istio.io/inject: 'true'
     sidecar.istio.io/rewriteAppHTTPProbers: 'true'
     #serving.kserve.io/storage-initializer-uid: "1000970001" # https://github.com/kserve/kserve/blob/master/docs/OPENSHIFT_GUIDE.md#with-service-mesh-istio
-    serving.kserve.io/deploymentMode: ModelMesh
-  name: fraud-inference
-  namespace: fraud
+  name: {{ $notebook.name }}-inference
+  namespace: {{ $.Values.project.name }}
   labels:
     opendatahub.io/dashboard: 'true'
 spec:
@@ -27,8 +29,9 @@ spec:
         requests:
           cpu: '1'
           memory: 4Gi
-      runtime: seve
+      runtime: {{ $notebook.name }}-inference-runtime
       storage:
-        key: dataconnection-one #Minio has to have port 80 becuase port parameter here do not work
-        path: models/fraud/1/model.onnx  
-
+        key:  {{ $notebook.inference-dataconnections }}
+        path: models/{{ $notebook.name }}/1/model.onnx  #TODO play with model versions
+{{- end }}
+{{- end }}

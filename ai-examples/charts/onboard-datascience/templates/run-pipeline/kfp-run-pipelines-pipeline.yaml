@@ -1,0 +1,13 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: pipeline-run-{{ .Values.pipeline.name }}
+  namespace: {{ $.Values.project.name }}
+spec:
+  tasks:
+    - name: kfp-run-pipelines
+      taskRef:
+        kind: Task
+        name: kfp-run-pipelines
+
+

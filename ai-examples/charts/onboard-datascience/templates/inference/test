@@ -1,0 +1,15 @@
+sally_transaction_details = [
+    [0.3111400080477545,
+    1.9459399775518593, 
+    1.0, 
+    0.0, 
+    0.0]
+    ]
+
+prediction = sess.run([output_name], {input_name: scaler.transform(sally_transaction_details).astype(np.float32)})
+
+print("Is Sally's transaction predicted to be fraudulent? (true = YES, false = NO) ")
+print(np.squeeze(prediction) > threshold)
+
+print("How likely was Sally's transaction to be fraudulent? ")
+print("{:.5f}".format(np.squeeze(prediction)) + "%")

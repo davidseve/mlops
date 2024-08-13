@@ -1,0 +1,139 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  annotations:
+    tekton.dev/displayName: Run a Pipeline to a KFP cluster
+    tekton.dev/pipelines.minVersion: '0.19'
+    tekton.dev/tags: 'kfp'
+  name: kfp-run-pipelines
+  namespace: {{ $.Values.project.name }}
+  labels:
+    app.kubernetes.io/version: '0.1'
+    operator.tekton.dev/provider-type: redhat
+spec:
+  params:
+    - description: The image used where python is installed
+      name: TASK_IMAGE
+      type: string
+      default: quay.io/modh/runtime-images:runtime-cuda-tensorflow-ubi9-python-3.9-2023b-20240301      
+  steps:
+    - image: $(params.TASK_IMAGE)
+      name: compile
+      resources: {}
+      script: |
+        #!/bin/sh
+
+        pip install kfp requests
+
+        content='      
+        import json
+        import requests
+        import sys
+        import kfp
+        from kfp import Client
+
+        from kubernetes import client, config
+
+        # Get the service account token or return None
+        def get_token():
+            try:
+                with open("/var/run/secrets/kubernetes.io/serviceaccount/token", "r") as f:
+                    return f.read().strip()
+            except Exception as e:
+                print(f"Error: {e}")
+                return None
+
+        # Get the route host for the specified route name in the specified namespace
+        def get_route_host(route_name: str):
+            # Load in-cluster Kubernetes configuration but if it fails, load local configuration
+            try:
+                config.load_incluster_config()
+            except config.config_exception.ConfigException:
+                config.load_kube_config()
+
+            # Get the current namespace
+            with open("/var/run/secrets/kubernetes.io/serviceaccount/namespace", "r") as f:
+                namespace = f.read().strip()
+
+            # Create Kubernetes API client
+            api_instance = client.CustomObjectsApi()
+
+            try:
+                # Retrieve the route object
+                route = api_instance.get_namespaced_custom_object(
+                    group="route.openshift.io",
+                    version="v1",
+                    namespace=namespace,
+                    plural="routes",
+                    name=route_name
+                )
+
+                # Extract spec.host field
+                route_host = route["spec"]["host"]
+                return route_host
+            
+            except Exception as e:
+                print(f"Error: {e}")
+                return None
+
+        # Take token and kfp_endpoint as optional command-line arguments
+        token = sys.argv[1] if len(sys.argv) > 1 else None
+        kfp_endpoint = sys.argv[2] if len(sys.argv) > 2 else None
+
+        if not token:
+            print("Token endpoint not provided finding it automatically.")
+            token = get_token()
+
+        if not kfp_endpoint:
+            print("KFP endpoint not provided finding it automatically.")
+            kfp_endpoint = get_route_host(route_name="ds-pipeline-dspa")
+
+        # If both kfp_endpoint and token are provided, upload the pipeline
+        if kfp_endpoint and token:
+            if not kfp_endpoint.startswith("http"):
+                kfp_endpoint = f"https://{kfp_endpoint}"
+
+            client = kfp.Client(host=kfp_endpoint, existing_token=token, ssl_ca_cert="/var/run/secrets/kubernetes.io/serviceaccount/ca.crt",)
+
+            # List pipelines
+            pipelines = client.list_pipelines()
+            if not pipelines.pipelines:
+                raise Exception("No pipelines found.")
+            pipeline_id = pipelines.pipelines[0].pipeline_id
+            print("pipeline_id:")
+            print(pipeline_id)
+
+            # List pipelines version
+            pipeline_versions = client.list_pipeline_versions(pipeline_id=pipeline_id)
+            if not pipeline_versions.pipeline_versions:
+                raise Exception("No pipeline_versions found.")
+            pipeline_version_id = pipeline_versions.pipeline_versions[0].pipeline_version_id
+            print("pipeline_version_id")
+            print(pipeline_version_id)
+
+            # List experiments
+            list_experiments=client.list_experiments()
+            if not list_experiments.experiments:
+                raise Exception("No experiment found.")
+            experiment_id=list_experiments.experiments[0].experiment_id
+            print("experiment_id")
+            print(experiment_id)
+
+            run=client.run_pipeline(experiment_id=experiment_id,job_name="Run Fraud",pipeline_id=pipeline_id,version_id=pipeline_version_id)
+            print("run.run_id")
+            print(run.run_id)
+            run=client.wait_for_run_completion(run_id=run.run_id, timeout=600)
+            print("run_completion")
+            print(run)
+
+        '
+        echo "$content" > "run-pipelines.py"
+        cat run-pipelines.py
+        # Upload the pipeline
+        export NAMESPACE_NAME="$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace)"
+        export TOKEN="$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)"
+
+        echo "NAMESPACE_NAME: $NAMESPACE_NAME TOKEN: $TOKEN"
+
+
+        python run-pipelines.py $TOKEN

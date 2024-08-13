@@ -30,6 +30,7 @@ notebooks:
       size: 20Gi
     dataconnections:
       - dataconnection-one
+    inference-dataconnections: dataconnection-one
 dataconnections:
   - dataconnection-one:
     # name of the data connection
