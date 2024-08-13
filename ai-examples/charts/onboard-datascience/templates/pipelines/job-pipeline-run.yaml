@@ -18,12 +18,15 @@ spec:
         args:
         - -ec
         - |-
-          if [ -n "$(oc get pipeline-upload-{{ .Values.pipeline.name }} -oname 2>/dev/null)" ]; then
-            tkn pipeline start pipeline-upload-{{ .Values.pipeline.name }} --workspace name=workspace-source,claimName=pipeline-upload-{{ .Values.pipeline.name }}-source-pvc -n $namespace --showlog --use-param-defaults
-          fi
-          if [ -n "$(oc get pipeline-run-{{ .Values.pipeline.name }} -oname 2>/dev/null)" ]; then            
-            sleep 10
-            tkn pipeline start pipeline-run-{{ .Values.pipeline.name }} -n $namespace --showlog
+          # Define the namespace and label
+          NAMESPACE="{{ $.Values.project.name }}"
+          LABEL="initial=true"
+
+          # Check if there is a pod with the specified label in the specified namespace
+          if ! oc get pods -n "$NAMESPACE" -l "$LABEL" --no-headers | grep -q '^'; then
+              tkn pipeline start pipeline-upload-{{ .Values.pipeline.name }} -l initial=true --workspace name=workspace-source,claimName=pipeline-upload-{{ .Values.pipeline.name }}-source-pvc -n $namespace --showlog --use-param-defaults
+              sleep 10
+              tkn pipeline start pipeline-run-{{ .Values.pipeline.name }} -l initial=true -n $namespace --showlog
           fi
       restartPolicy: Never
   backoffLimit: 1

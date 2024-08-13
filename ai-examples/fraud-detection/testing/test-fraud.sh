@@ -3,7 +3,6 @@
 
 appfile=../gitops/app-ai-fraud.yaml 
 appname=ai-fraud-example
-workbench=workbench-one
 namespace=fraud
 
 oc apply -f $appfile
