@@ -6,10 +6,10 @@ metadata:
   labels:
     app.kubernetes.io/component: minio
     app.kubernetes.io/instance: minio
-    app.kubernetes.io/name: minio-{{ .name }} #TODO add -{{ $.Values.project.name }}
+    app.kubernetes.io/name: minio-{{ .name }}
     app.kubernetes.io/part-of: minio
     component: minio
-  name: create-minio-buckets-{{ .name }} #TODO add -{{ $.Values.project.name }}
+  name: create-minio-buckets-{{ .name }}
   namespace: minio
 spec:
   selector: {}
