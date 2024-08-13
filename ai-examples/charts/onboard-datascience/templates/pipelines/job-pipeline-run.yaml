@@ -44,7 +44,7 @@ spec:
       serviceAccountName: pod-lister
       containers:
       - name: pipelinerun
-        image: registry.redhat.io/openshift4/ose-tools-rhel8:v4.14
+        image: gcr.io/tekton-releases/dogfooding/tkn@sha256:d17fec04f655551464a47dd59553c9b44cf660cc72dbcdbd52c0b8e8668c0579
         imagePullPolicy: IfNotPresent        
         command: ["/bin/bash"]
         args:
