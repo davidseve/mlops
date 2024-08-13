@@ -1,5 +1,36 @@
 
 {{- if .Values.pipeline.enabled }}
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: pod-lister
+  namespace: {{ $.Values.project.name }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: {{ $.Values.project.name }}
+  name: pod-lister-role
+rules:
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["list"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: pod-lister-binding
+  namespace: {{ $.Values.project.name }}
+subjects:
+- kind: ServiceAccount
+  name: pod-lister
+  namespace: {{ $.Values.project.name }}
+roleRef:
+  kind: Role
+  name: pod-lister-role
+  apiGroup: rbac.authorization.k8s.io
+---
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -10,6 +41,7 @@ metadata:
 spec:
   template:
     spec:
+      serviceAccountName: pod-lister
       containers:
       - name: pipelinerun
         image: registry.redhat.io/openshift4/ose-tools-rhel8:v4.14
