@@ -31,7 +31,7 @@ spec:
           memory: 4Gi
       runtime: {{ $notebook.name }}-inference-runtime
       storage:
-        key:  {{ $notebook.inference-dataconnections }}
+        key:  {{ $notebook.inferencedataconnections }}
         path: models/{{ $notebook.name }}/1/model.onnx  #TODO play with model versions
 {{- end }}
 {{- end }}
