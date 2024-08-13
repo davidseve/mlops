@@ -44,7 +44,7 @@ spec:
       serviceAccountName: pod-lister
       containers:
       - name: pipelinerun
-        image: gcr.io/tekton-releases/dogfooding/tkn@sha256:d17fec04f655551464a47dd59553c9b44cf660cc72dbcdbd52c0b8e8668c0579
+        image: registry.redhat.io/openshift4/ose-tools-rhel8:v4.14
         imagePullPolicy: IfNotPresent        
         command: ["/bin/bash"]
         args:
@@ -52,13 +52,44 @@ spec:
         - |-
           # Define the namespace and label
           NAMESPACE="{{ $.Values.project.name }}"
-          LABEL="initial=true"
+          LABEL="initial-pipeline-run=true"
 
           # Check if there is a pod with the specified label in the specified namespace
           if ! oc get pods -n "$NAMESPACE" -l "$LABEL" --no-headers | grep -q '^'; then
-              tkn pipeline start pipeline-upload-{{ .Values.pipeline.name }} -l initial=true --workspace name=workspace-source,claimName=pipeline-upload-{{ .Values.pipeline.name }}-source-pvc -n $namespace --showlog --use-param-defaults
+              cat << EOF | oc apply -f-
+              apiVersion: tekton.dev/v1
+              kind: PipelineRun
+              metadata:
+                  generateName: pipeline-upload-{{ .Values.pipeline.name }}
+                  namespace: {{ $.Values.project.name }}
+                  labels:
+                    initial-pipeline-run: true
+                    pipeline-upload: {{ .Values.pipeline.name }}
+              spec:
+                  pipelineRef:
+                    name: pipeline-upload-{{ .Values.pipeline.name }}
+                  workspaces:
+                  - name: workspace-source
+                    persistentVolumeClaim:
+                      claimName: pipeline-upload-{{ .Values.pipeline.name }}-source-pvc
+              EOF
+              oc wait --for=condition=Succeeded --timeout=1h pipelinerun -l "$LABEL" -l pipeline-upload={{ .Values.pipeline.name }} -n <namespace>
+              
               sleep 10
-              tkn pipeline start pipeline-run-{{ .Values.pipeline.name }} -l initial=true -n $namespace --showlog
+              cat << EOF | oc apply -f-
+              apiVersion: tekton.dev/v1
+              kind: PipelineRun
+              metadata:
+                  generateName: pipeline-run-{{ .Values.pipeline.name }}
+                  namespace: {{ $.Values.project.name }}
+                  labels:
+                    initial-pipeline-run: true
+                    pipeline-run: {{ .Values.pipeline.name }}
+              spec:
+                  pipelineRef:
+                    name: pipeline-run-{{ .Values.pipeline.name }}
+              EOF
+              oc wait --for=condition=Succeeded --timeout=1h pipelinerun -l "$LABEL" -l pipeline-run={{ .Values.pipeline.name }} -n <namespace>
           fi
       restartPolicy: Never
   backoffLimit: 1
