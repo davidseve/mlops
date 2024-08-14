@@ -8,8 +8,8 @@ metadata:
     opendatahub.io/recommended-accelerators: '["nvidia.com/gpu"]'
     opendatahub.io/template-display-name: OpenVINO Model Server
     opendatahub.io/template-name: kserve-ovms
-    openshift.io/display-name: {{ $.Values.project.name }}-inference-runtime
-  name: {{ $.Values.project.name }}-inference-runtime
+    openshift.io/display-name: {{ $.Values.project.name }}inference-runtime
+  name: {{ $.Values.project.name }}inference-runtime
   namespace: {{ $.Values.project.name }}
   labels:
     opendatahub.io/dashboard: 'true'

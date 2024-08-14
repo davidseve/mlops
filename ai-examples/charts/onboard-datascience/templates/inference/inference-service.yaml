@@ -4,7 +4,7 @@ kind: InferenceService
 metadata:
   annotations:
     argocd.argoproj.io/sync-wave: "20"
-    openshift.io/display-name: {{ $.Values.project.name }}-inference
+    openshift.io/display-name: {{ $.Values.project.name }}inference
     serving.knative.openshift.io/enablePassthrough: 'true'
     sidecar.istio.io/inject: 'true'
     sidecar.istio.io/rewriteAppHTTPProbers: 'true'
@@ -12,7 +12,7 @@ metadata:
     serving.kserve.io/deploymentMode: ModelMesh
     {{ end }}
     #serving.kserve.io/storage-initializer-uid: "1000970001" # https://github.com/kserve/kserve/blob/master/docs/OPENSHIFT_GUIDE.md#with-service-mesh-istio
-  name: {{ $.Values.project.name }}-inference
+  name: {{ $.Values.project.name }}inference
   namespace: {{ $.Values.project.name }}
   labels:
     opendatahub.io/dashboard: 'true'
@@ -31,7 +31,7 @@ spec:
         requests:
           cpu: '1'
           memory: 4Gi
-      runtime: {{ $.Values.project.name }}-inference-runtime
+      runtime: {{ $.Values.project.name }}inference-runtime
       storage:
         key:  {{ .Values.inferencedataconnections }}
         path: models/fraud/  
