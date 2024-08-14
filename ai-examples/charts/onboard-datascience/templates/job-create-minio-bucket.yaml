@@ -9,8 +9,8 @@ metadata:
     app.kubernetes.io/name: minio-{{ .name }}
     app.kubernetes.io/part-of: minio
     component: minio
-  #TODO add -{{ $.Values.project.name }}
-  name: create-minio-buckets-{{ .name }} 
+  
+  name: create-minio-buckets-{{ .name }} # TODO add -{{ $.Values.project.name }}
   namespace: minio
 spec:
   selector: {}
