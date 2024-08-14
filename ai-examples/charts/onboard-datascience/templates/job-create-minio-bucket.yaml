@@ -6,10 +6,10 @@ metadata:
   labels:
     app.kubernetes.io/component: minio
     app.kubernetes.io/instance: minio
-    app.kubernetes.io/name: minio-{{ .name }}
+    app.kubernetes.io/name: minio-{{ .dataconnection.name }}-{{ .global.Values.project.name }}
     app.kubernetes.io/part-of: minio
     component: minio
-  name: create-minio-buckets-{{ .name }}
+  name: create-minio-buckets-{{ .dataconnection.name }}-{{ .global.Values.project.name }}
   namespace: minio
 spec:
   selector: {}
@@ -35,8 +35,8 @@ spec:
                             endpoint_url="http://minio:9000",
                             aws_access_key_id=os.getenv("MINIO_ROOT_USER"),
                             aws_secret_access_key=os.getenv("MINIO_ROOT_PASSWORD"))
-          bucket = '{{ .name }}'
-          print('creating {{ .name }} bucket')
+          bucket = '{{ .dataconnection.name }}'
+          print('creating {{ .dataconnection.name }} bucket')
           if bucket not in [bu["Name"] for bu in s3.list_buckets()["Buckets"]]:
             s3.create_bucket(Bucket=bucket)
           EOF
@@ -73,12 +73,17 @@ spec:
       restartPolicy: Never
       serviceAccount: minio-manage
       serviceAccountName: minio-manage
+---
 {{- end }}
 
 {{- range $dataconnection := $.Values.dataconnections }}
-{{- template "data-job" $dataconnection }}
+{{- $context := dict "dataconnection" $dataconnection "global" $ -}}
+{{ template "data-job" $context }}
+
 {{- end }}
 
-{{ template "data-job" $.Values.pipeline }}
+{{- $context := dict "dataconnection" $.Values.pipeline "global" $ -}}
+{{ template "data-job" $context }}
+
 
 
