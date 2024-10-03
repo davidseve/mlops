@@ -1,6 +1,7 @@
 # openshift user using the project - to add the right user in the UI
 user: kubeadmin
-clusterURL: https://rhods-dashboard-redhat-ods-applications.apps.cluster-87xpx.87xpx.sandbox1137.opentlc.com
+# TODO replace clusetURL
+clusterURL: https://rhods-dashboard-redhat-ods-applications.apps.dseveria.sandbox687.opentlc.com
 project:
   # name of the data scienece project
   name: fraud

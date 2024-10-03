@@ -79,6 +79,6 @@ echo "RHAI dashboard:"
 printf "https://$(oc get route -n redhat-ods-applications rhods-dashboard -o jsonpath='{.spec.host}')\n\n"
 
 #Execute Fraud detection example
-sleep 1
-cd ../ai-examples/fraud-detection/testing
-./test-fraud.sh
+# sleep 1
+# cd ../ai-examples/fraud-detection/testing
+# ./test-fraud.sh
