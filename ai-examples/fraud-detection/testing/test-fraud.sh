@@ -59,6 +59,7 @@ while true; do
         echo "Failed: HTTP Code $http_code or unexpected response. Retrying in $retry_interval seconds..."
         sleep "$retry_interval"
     fi
+    echo $body
 done
 
 # Clean up

@@ -27,7 +27,7 @@ oc get deployments -n redhat-ods-applications
 cd ../ai-examples/fraud-detection/testing
 ./test-fraud.sh
 
-TODO check s3 hay second pipeline execution do nothing, but when the pipeline is deleted (not just archived) it is executed again
+TODO check s3 second pipeline execution do nothing, but when the pipeline is deleted (not just archived) it is executed again
 
 ## Create data science pipelines
 
