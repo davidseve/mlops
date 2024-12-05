@@ -4,7 +4,7 @@ metadata:
   name: ai-fraud-example
   namespace: openshift-gitops
   annotations:
-    argocd.argoproj.io/compare-options: IgnoreExtraneous #TODO test it for router This resource is not present in the application's source. It will be deleted from Kubernetes if the prune option is enabled during sync.
+    argocd.argoproj.io/compare-options: IgnoreExtraneous
 spec:
   destination:
     namespace: openshift-gitops

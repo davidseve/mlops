@@ -81,4 +81,4 @@ printf "https://$(oc get route -n redhat-ods-applications rhods-dashboard -o jso
 #Execute Fraud detection example
 # sleep 1
 # cd ../ai-examples/fraud-detection/testing
-# ./test-fraud.sh
+# ./test-fraud.sh dseveria.sandbox1235.opentlc.com
