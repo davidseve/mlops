@@ -24,7 +24,6 @@ while [[ "${status}" != "Healthy" ]]; do
 done
  
 # The URL for the curl command
-# TODO replace clusetURL
 url="https://fraudinference-fraud.apps.$1/v2/models/fraudinference/versions/1/infer" 
 data='{
           "id" : "42",
