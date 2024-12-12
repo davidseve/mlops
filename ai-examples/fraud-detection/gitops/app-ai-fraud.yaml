@@ -21,7 +21,3 @@ spec:
     automated:
       prune: true
       selfHeal: true
-  ignoreDifferences:
-    - group: route.openshift.io  # API group of the Route resource
-      kind: Route               # Kind of the resource
-      name: fraudinference-fraud
