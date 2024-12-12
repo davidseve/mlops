@@ -3,7 +3,6 @@ apiVersion: serving.kserve.io/v1beta1
 kind: InferenceService
 metadata:
   annotations:
-    application.instanceLabelKey: argocd.argoproj.io/instance
     argocd.argoproj.io/sync-wave: "20"
     openshift.io/display-name: {{ $.Values.project.name }}inference
     serving.knative.openshift.io/enablePassthrough: 'true'
