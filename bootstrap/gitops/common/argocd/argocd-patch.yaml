@@ -7,7 +7,7 @@ metadata:
   annotations:
     argocd.argoproj.io/sync-options: ServerSideApply=true
 spec:
-  resourceTrackingMethod: annotation
+  resourceTrackingMethod: annotation #Needed because InferenceService create route with label app.kubernetes.io/instance so try to manage it and delete it
   resourceHealthChecks:
   - group: argoproj.io
     kind: Application

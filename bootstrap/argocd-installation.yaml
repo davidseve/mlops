@@ -22,7 +22,7 @@ metadata:
   name: openshift-gitops-operator
   namespace: openshift-gitops-operator
 spec:
-  channel: gitops-1.12 #TODO test it
+  channel: gitops-1.12
   installPlanApproval: Manual
   name: openshift-gitops-operator
   source: redhat-operators
