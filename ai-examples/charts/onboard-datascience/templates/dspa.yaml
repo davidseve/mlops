@@ -7,18 +7,9 @@ metadata:
   namespace: {{ $.Values.project.name }}
   annotations:
     argocd.argoproj.io/compare-options: IgnoreExtraneous
-  #   argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+    test: 1
 spec:
   apiServer:
-    applyTektonCustomResource: true
-    archiveLogs: false
-    autoUpdatePipelineDefaultVersion: true
-    collectMetrics: true
-    dbConfigConMaxLifetimeSec: 120
-    injectDefaultScript: true
-    stripEOF: true
-    terminateStatus: Cancelled
-    trackArtifacts: true
     caBundleFileMountPath: ''
     stripEOF: true
     dbConfigConMaxLifetimeSec: 120
