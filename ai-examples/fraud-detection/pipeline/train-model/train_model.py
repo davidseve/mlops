@@ -22,11 +22,6 @@ parser.add_argument('--model_output_path', type=str,
   help='Path of the local file where the Output 1 data should be written.')
 args = parser.parse_args()
 
-# Creating the directory where the output file is created (the directory
-# may or may not exist).
-#TODO it is neccesary?
-#Path(args.output1_path).parent.mkdir(parents=True, exist_ok=True)
-
 # Load the CSV data which we will use to train the model.
 # It contains the following fields:
 #   distancefromhome - The distance from home where the transaction happened.

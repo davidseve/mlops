@@ -76,11 +76,11 @@ curl -k -X POST "$url" -H "Content-Type: application/json" -d "$data"
 
 #### Step 1: Delete AI Fraud Detection Example
 ```bash
-./ai-examples/fraud-detection/testing/delete-fraud.sh
+./delete-fraud.sh
 ```
 
 #### Step 2: Delete Install OpenShift AI
 ```bash
-cd bootstrap
+cd ../../../bootstrap/
 ./delete.sh
 ```
