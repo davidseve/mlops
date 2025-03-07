@@ -43,7 +43,7 @@ spec:
         - fetch-repository
       params:
         - name: TASK_IMAGE
-          value: quay.io/modh/runtime-images:runtime-cuda-tensorflow-ubi9-python-3.9-2023b-2025010150101
+          value: quay.io/modh/runtime-images:runtime-cuda-tensorflow-ubi9-python-3.11-20250213
         - name: PYTHON_PIPELINE_NAME
           value: {{ .Values.pipeline.pythonPipelineName }}
         - name: REQUIREMENTS_FILE
