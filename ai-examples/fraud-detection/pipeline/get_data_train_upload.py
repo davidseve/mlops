@@ -12,7 +12,7 @@ from kfp import kubernetes
 
 from kubernetes import client, config
 
-@dsl.component(base_image="quay.io/modh/runtime-images:runtime-cuda-tensorflow-ubi9-python-3.9-2023b-20240301")
+@dsl.component(base_image="quay.io/modh/runtime-images:runtime-cuda-tensorflow-ubi9-python-3.9-2023b-20250101")
 def get_data(data_output_path: OutputPath()):
     import urllib.request
     print("starting download...")
@@ -22,7 +22,7 @@ def get_data(data_output_path: OutputPath()):
 
 
 @dsl.component(
-    base_image="quay.io/modh/runtime-images:runtime-cuda-tensorflow-ubi9-python-3.9-2023b-20240301",
+    base_image="quay.io/modh/runtime-images:runtime-cuda-tensorflow-ubi9-python-3.9-2023b-20250101",
     packages_to_install=["boto3", "botocore"]
 )
 def upload_model(input_model_path: InputPath()):
