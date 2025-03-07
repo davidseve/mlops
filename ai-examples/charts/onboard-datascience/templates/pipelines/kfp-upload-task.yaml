@@ -18,7 +18,7 @@ spec:
     - description: The image used where python is installed
       name: TASK_IMAGE
       type: string
-      default: quay.io/modh/runtime-images:runtime-cuda-tensorflow-ubi9-python-3.9-2023b-20250101
+      default: quay.io/modh/runtime-images:runtime-cuda-tensorflow-ubi9-python-3.9-2023b-2025010150101
     - description: The pipeline python script to compile
       name: PIPELINE_NAME
       type: string
