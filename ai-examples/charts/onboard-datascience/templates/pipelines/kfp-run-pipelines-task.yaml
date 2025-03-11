@@ -119,7 +119,10 @@ spec:
             print("experiment_id")
             print(experiment_id)
 
-            run=client.run_pipeline(experiment_id=experiment_id,job_name="Run Fraud",pipeline_id=pipeline_id,version_id=pipeline_version_id)
+            run=client.run_pipeline(experiment_id=experiment_id,job_name="Run Fraud",pipeline_id=pipeline_id,version_id=pipeline_version_id
+                                    params={'s3_key': 'models/fraud/1/model.onnx',
+                                             'secret_name': 'dataconnection-one'}
+                                    )
             print("run.run_id")
             print(run.run_id)
             run=client.wait_for_run_completion(run_id=run.run_id, timeout=600)
