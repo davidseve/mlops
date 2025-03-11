@@ -11,7 +11,7 @@ inferencedataconnections: dataconnection-one
 multimodel: false
 notebooks:
   - notebook-one:
-    enabled: true
+    enabled: false
       # name of the workbench
     name: workbench-one
       # image used by the workbench
