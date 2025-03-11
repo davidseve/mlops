@@ -13,10 +13,10 @@ from kfp import kubernetes
 from kubernetes import client, config
 
 @dsl.component(base_image="quay.io/modh/runtime-images:runtime-cuda-tensorflow-ubi9-python-3.11-20250213")
-def get_data(data_output_path: OutputPath()):
+def get_data(data_output_path: OutputPath(), card_transdata: str):
     import urllib.request
     print("starting download...")
-    url = "https://raw.githubusercontent.com/davidseve/mlops/main/ai-examples/fraud-detection/data/card_transdata.csv"
+    url = card_transdata
     urllib.request.urlretrieve(url, data_output_path)
     print("done")
 
@@ -55,15 +55,15 @@ def upload_model(input_model_path: InputPath(), s3_key: str):
 
 @dsl.pipeline(name=os.path.basename(__file__).replace('.py', ''))
 def pipeline(s3_key: str,
-                secret_name: str = "dataconnection-one"):
-    get_data_task = get_data()
+             secret_name: str,
+             card_transdata: str,
+             train_model_component: str):
+    get_data_task = get_data(card_transdata=card_transdata)
     csv_file = get_data_task.outputs["data_output_path"]
     # csv_file = get_data_task.output
 
 
-    train_model = components.load_component_from_url(
-        'https://raw.githubusercontent.com/davidseve/mlops/main/ai-examples/fraud-detection/pipeline/train-model/component.yaml'
-    )
+    train_model = components.load_component_from_url(train_model_component)
 
     train_model_task = train_model(data_input_path=csv_file)
     onnx_file = train_model_task.outputs["model_output_path"]
