@@ -72,7 +72,7 @@ def pipeline(s3_key: str = "models/fraud/1/model.onnx",
 
     upload_model_task = upload_model(input_model_path=onnx_file)
 
-    upload_model_task.container.set_env_variable(name="S3_KEY", value=s3_key) #TODO manage here Model versioning
+    upload_model_task.set_env_variable(name="S3_KEY", value=s3_key) #TODO manage here Model versioning
 
     kubernetes.use_secret_as_env(
         task=upload_model_task,
