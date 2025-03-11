@@ -121,7 +121,7 @@ spec:
 
             run=client.run_pipeline(experiment_id=experiment_id,job_name="Run Fraud",pipeline_id=pipeline_id,version_id=pipeline_version_id,
                                     params={'s3_key': 'models/fraud/1/model.onnx',
-                                             'secret_name': 'dataconnection-one'}
+                                             'secret_name': 'dataconnection-one'},
                                     )
             print("run.run_id")
             print(run.run_id)
