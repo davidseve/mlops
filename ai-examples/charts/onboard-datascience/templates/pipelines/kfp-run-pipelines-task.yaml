@@ -15,7 +15,15 @@ spec:
     - description: The image used where python is installed
       name: TASK_IMAGE
       type: string
-      default: quay.io/modh/runtime-images:runtime-cuda-tensorflow-ubi9-python-3.11-20250213      
+      default: quay.io/modh/runtime-images:runtime-cuda-tensorflow-ubi9-python-3.11-20250213    
+    - description: Model version
+      name: MODEL_VERSION
+      type: string
+      default: 1 
+    - description: dataconnection secret name
+      name: DATACONNECTION
+      type: string
+      default: dataconnection-one
   steps:
     - image: $(params.TASK_IMAGE)
       name: compile
@@ -119,9 +127,9 @@ spec:
             print("experiment_id")
             print(experiment_id)
 
-            run=client.run_pipeline(experiment_id=experiment_id,job_name="Run Fraud",pipeline_id=pipeline_id,version_id=pipeline_version_id,
-                                    params={'s3_key': 'models/fraud/1/model.onnx',
-                                             'secret_name': 'dataconnection-one'},
+            run=client.run_pipeline(experiment_id=experiment_id,job_name="Run {{ $.Values.project.name }}",pipeline_id=pipeline_id,version_id=pipeline_version_id,
+                                    params={"s3_key": "models/{{ $.Values.project.name }}/$(params.MODEL_VERSION)/model.onnx",
+                                             "secret_name": $(params.DATACONNECTION)},
                                     )
             print("run.run_id")
             print(run.run_id)
