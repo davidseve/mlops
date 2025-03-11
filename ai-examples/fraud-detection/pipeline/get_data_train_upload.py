@@ -72,18 +72,18 @@ def pipeline(s3_key: str = "models/fraud/1/model.onnx",
 
     upload_model_task = upload_model(input_model_path=onnx_file)
 
-    upload_model_task.set_env_variable(name="S3_KEY", value=s3_key) #TODO manage here Model versioning
+    upload_model_task.container.set_env_variable(name="S3_KEY", value=s3_key) #TODO manage here Model versioning
 
     kubernetes.use_secret_as_env(
         task=upload_model_task,
-        secret_name='dataconnection-one', #TODO this should be a parameter from the pipeline
-        secret_key_to_env={
-            'AWS_ACCESS_KEY_ID': 'AWS_ACCESS_KEY_ID',
-            'AWS_SECRET_ACCESS_KEY': 'AWS_SECRET_ACCESS_KEY',
-            'AWS_DEFAULT_REGION': 'AWS_DEFAULT_REGION',
-            'AWS_S3_BUCKET': 'AWS_S3_BUCKET',
-            'AWS_S3_ENDPOINT': 'AWS_S3_ENDPOINT',
-        })
+        secret_name=secret_name, #TODO this should be a parameter from the pipeline
+        secret_key_to_env=[
+            kubernetes.SecretAsEnv(secret_key='AWS_ACCESS_KEY_ID', env_variable='AWS_ACCESS_KEY_ID'),
+            kubernetes.SecretAsEnv(secret_key='AWS_SECRET_ACCESS_KEY', env_variable='AWS_SECRET_ACCESS_KEY'),
+            kubernetes.SecretAsEnv(secret_key='AWS_DEFAULT_REGION', env_variable='AWS_DEFAULT_REGION'),
+            kubernetes.SecretAsEnv(secret_key='AWS_S3_BUCKET', env_variable='AWS_S3_BUCKET'),
+            kubernetes.SecretAsEnv(secret_key='AWS_S3_ENDPOINT', env_variable='AWS_S3_ENDPOINT'),
+        ])
 
 def get_pipeline_by_name(client: kfp.Client, pipeline_name: str):
     import json
