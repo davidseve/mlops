@@ -56,7 +56,8 @@ def upload_model(input_model_path: InputPath()):
 
 
 @dsl.pipeline(name=os.path.basename(__file__).replace('.py', ''))
-def pipeline():
+def pipeline(s3_key: str = "models/fraud/1/model.onnx",
+                secret_name: str = "dataconnection-one"):
     get_data_task = get_data()
     csv_file = get_data_task.outputs["data_output_path"]
     # csv_file = get_data_task.output
@@ -71,11 +72,11 @@ def pipeline():
 
     upload_model_task = upload_model(input_model_path=onnx_file)
 
-    upload_model_task.set_env_variable(name="S3_KEY", value="models/fraud/1/model.onnx") #TODO manage here Model versioning
+    upload_model_task.set_env_variable(name="S3_KEY", value=s3_key) #TODO manage here Model versioning
 
     kubernetes.use_secret_as_env(
         task=upload_model_task,
-        secret_name='dataconnection-one', #TODO this should be a parameter from the pipeline
+        secret_name=secret_name, #TODO this should be a parameter from the pipeline
         secret_key_to_env={
             'AWS_ACCESS_KEY_ID': 'AWS_ACCESS_KEY_ID',
             'AWS_SECRET_ACCESS_KEY': 'AWS_SECRET_ACCESS_KEY',
