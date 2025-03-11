@@ -129,7 +129,7 @@ spec:
 
             run=client.run_pipeline(experiment_id=experiment_id,job_name="Run {{ $.Values.project.name }}",pipeline_id=pipeline_id,version_id=pipeline_version_id,
                                     params={"s3_key": "models/{{ $.Values.project.name }}/$(params.MODEL_VERSION)/model.onnx",
-                                             "secret_name": "$(params.DATACONNECTION)}",
+                                             "secret_name": "$(params.DATACONNECTION)"},
                                     )
             print("run.run_id")
             print(run.run_id)
