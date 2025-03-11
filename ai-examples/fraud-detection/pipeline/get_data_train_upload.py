@@ -56,7 +56,8 @@ def upload_model(input_model_path: InputPath()):
 
 
 @dsl.pipeline(name=os.path.basename(__file__).replace('.py', ''))
-def pipeline():
+def pipeline(s3_key: str = "models/fraud/1/model.onnx",
+                secret_name: str = "dataconnection-one"):
     get_data_task = get_data()
     csv_file = get_data_task.outputs["data_output_path"]
     # csv_file = get_data_task.output
