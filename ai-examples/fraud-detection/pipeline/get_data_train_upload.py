@@ -56,8 +56,7 @@ def upload_model(input_model_path: InputPath()):
 
 
 @dsl.pipeline(name=os.path.basename(__file__).replace('.py', ''))
-def pipeline(s3_key: str ,
-               secret_name: str):
+def pipeline():
     get_data_task = get_data()
     csv_file = get_data_task.outputs["data_output_path"]
     # csv_file = get_data_task.output
