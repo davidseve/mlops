@@ -25,7 +25,7 @@ def get_data(data_output_path: OutputPath()):
     base_image="quay.io/modh/runtime-images:runtime-cuda-tensorflow-ubi9-python-3.11-20250213",
     packages_to_install=["boto3", "botocore"]
 )
-def upload_model(input_model_path: InputPath()):
+def upload_model(input_model_path: InputPath(), s3_key: str):
     import os
     import boto3
     import botocore
@@ -35,8 +35,6 @@ def upload_model(input_model_path: InputPath()):
     endpoint_url = "http://minio.minio.svc.cluster.local:9000" #TODO
     region_name = os.environ.get('AWS_DEFAULT_REGION')
     bucket_name = os.environ.get('AWS_S3_BUCKET')
-
-    s3_key = os.environ.get("S3_KEY")
 
     print(f"Uploading {input_model_path} to {s3_key} in {bucket_name} bucket in {endpoint_url} endpoint")
 
@@ -56,7 +54,8 @@ def upload_model(input_model_path: InputPath()):
 
 
 @dsl.pipeline(name=os.path.basename(__file__).replace('.py', ''))
-def pipeline(s3_key: str, secret_name: str):
+def pipeline(s3_key: str,
+                secret_name: str = "dataconnection-one"):
     get_data_task = get_data()
     csv_file = get_data_task.outputs["data_output_path"]
     # csv_file = get_data_task.output
@@ -69,10 +68,18 @@ def pipeline(s3_key: str, secret_name: str):
     train_model_task = train_model(data_input_path=csv_file)
     onnx_file = train_model_task.outputs["model_output_path"]
 
-    upload_model_task = upload_model(input_model_path=onnx_file)
+    upload_model_task = upload_model(input_model_path=onnx_file, s3_key=s3_key)
 
-    upload_model_task.set_env_variable(name="S3_KEY", value=s3_key) #TODO manage here Model versioning
-
+    kubernetes.use_secret_as_env(
+        task=upload_model_task,
+        secret_name='dataconnection-one', #TODO this should be a parameter from the pipeline
+        secret_key_to_env={
+            'AWS_ACCESS_KEY_ID': 'AWS_ACCESS_KEY_ID',
+            'AWS_SECRET_ACCESS_KEY': 'AWS_SECRET_ACCESS_KEY',
+            'AWS_DEFAULT_REGION': 'AWS_DEFAULT_REGION',
+            'AWS_S3_BUCKET': 'AWS_S3_BUCKET',
+            'AWS_S3_ENDPOINT': 'AWS_S3_ENDPOINT',
+        })
 
 def get_pipeline_by_name(client: kfp.Client, pipeline_name: str):
     import json
