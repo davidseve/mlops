@@ -1,11 +1,17 @@
 # PIPELINE DEFINITION
 # Name: get-data-train-upload
 # Inputs:
+#    card_transdata: str
 #    s3_key: str
-#    secret_name: str [Default: 'dataconnection-one']
+#    secret_name: str
+#    train_model_component: str
 components:
   comp-get-data:
     executorLabel: exec-get-data
+    inputDefinitions:
+      parameters:
+        card_transdata:
+          parameterType: STRING
     outputDefinitions:
       artifacts:
         data_output_path:
@@ -66,10 +72,10 @@ deploymentSpec:
 
           '
         - "\nimport kfp\nfrom kfp import dsl\nfrom kfp.dsl import *\nfrom typing import\
-          \ *\n\ndef get_data(data_output_path: OutputPath()):\n    import urllib.request\n\
-          \    print(\"starting download...\")\n    url = \"https://raw.githubusercontent.com/davidseve/mlops/main/ai-examples/fraud-detection/data/card_transdata.csv\"\
-          \n    urllib.request.urlretrieve(url, data_output_path)\n    print(\"done\"\
-          )\n\n"
+          \ *\n\ndef get_data(data_output_path: OutputPath(), card_transdata: str):\n\
+          \    import urllib.request\n    print(\"starting download...\")\n    url\
+          \ = card_transdata\n    urllib.request.urlretrieve(url, data_output_path)\n\
+          \    print(\"done\")\n\n"
         image: quay.io/modh/runtime-images:runtime-cuda-tensorflow-ubi9-python-3.11-20250213
     exec-train-fraud-detection-model:
       container:
@@ -133,6 +139,10 @@ root:
           enableCache: true
         componentRef:
           name: comp-get-data
+        inputs:
+          parameters:
+            card_transdata:
+              componentInputParameter: card_transdata
         taskInfo:
           name: get-data
       train-fraud-detection-model:
@@ -170,11 +180,13 @@ root:
           name: upload-model
   inputDefinitions:
     parameters:
+      card_transdata:
+        parameterType: STRING
       s3_key:
         parameterType: STRING
       secret_name:
-        defaultValue: dataconnection-one
-        isOptional: true
+        parameterType: STRING
+      train_model_component:
         parameterType: STRING
 schemaVersion: 2.1.0
 sdkVersion: kfp-2.12.1

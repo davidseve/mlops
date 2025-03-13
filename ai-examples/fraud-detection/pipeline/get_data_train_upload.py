@@ -57,13 +57,13 @@ def upload_model(input_model_path: InputPath(), s3_key: str):
 def pipeline(s3_key: str,
              secret_name: str,
              card_transdata: str,
-             train_model_component: 'Url'):
+             train_model_component: str):
     get_data_task = get_data(card_transdata=card_transdata)
     csv_file = get_data_task.outputs["data_output_path"]
     # csv_file = get_data_task.output
 
 
-    train_model = components.load_component_from_url(train_model_component)
+    train_model = components.load_component_from_url("https://raw.githubusercontent.com/kubeflow/pipelines/master/components/ai/fairing/TrainModel/component.yaml") #TODO error with train_model_component
 
     train_model_task = train_model(data_input_path=csv_file)
     onnx_file = train_model_task.outputs["model_output_path"]
