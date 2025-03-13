@@ -63,8 +63,10 @@ def pipeline(s3_key: str,
     # csv_file = get_data_task.output
 
 
-    train_model = components.load_component_from_url("https://raw.githubusercontent.com/kubeflow/pipelines/master/components/ai/fairing/TrainModel/component.yaml") #TODO error with train_model_component
-
+    train_model = components.load_component_from_url(
+        'https://raw.githubusercontent.com/davidseve/mlops/main/ai-examples/fraud-detection/pipeline/train-model/component.yaml'
+    )
+    
     train_model_task = train_model(data_input_path=csv_file)
     onnx_file = train_model_task.outputs["model_output_path"]
 
