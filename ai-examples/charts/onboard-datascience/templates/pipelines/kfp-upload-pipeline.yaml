@@ -1,5 +1,5 @@
 {{- if .Values.pipeline.enabled }}
-apiVersion: tekton.dev/v1beta1
+apiVersion: tekton.dev/v1
 kind: Pipeline
 metadata:
   name: pipeline-upload-{{ .Values.pipeline.name }}
@@ -24,17 +24,21 @@ spec:
   tasks:
     - name: fetch-repository
       params:
-        - name: url
+        - name: URL
           value: $(params.GIT_REPO)
-        - name: revision
+        - name: REVISION
           value: $(params.GIT_REVISION)
-        - name: deleteExisting
+        - name: DELETE_EXISTING
           value: 'true'
-        - name: sslVerify
+        - name: SSL_VERIFY
           value: $(params.GIT_SSL_VERIFY)
       taskRef:
-        kind: ClusterTask
-        name: git-clone
+        params:
+          - name: name
+            value: git-clone
+          - name: namespace
+            value: openshift-pipelines
+        resolver: cluster
       workspaces:
         - name: output
           workspace: workspace-source
