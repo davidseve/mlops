@@ -4,10 +4,18 @@ metadata:
   name: pipeline-run-{{ .Values.pipeline.name }}
   namespace: {{ $.Values.project.name }}
 spec:
+  params:
+    - description: Model version
+      name: MODEL_VERSION
+      type: string
+      default: 1 
   tasks:
     - name: kfp-run-pipelines
       taskRef:
         kind: Task
         name: kfp-run-pipelines
+      params:
+        - name: MODEL_VERSION
+          value: $(params.MODEL_VERSION)
 
 
