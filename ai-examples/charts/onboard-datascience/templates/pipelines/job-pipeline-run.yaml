@@ -77,27 +77,8 @@ spec:
           EOF
           fi    
               
-          if ! oc get pods -n "$NAMESPACE" -l "$LABEL" -l pipeline-run=pipeline-one --no-headers | grep -q '^'; then            
-              oc wait --for=condition=Succeeded --timeout=1h pipelinerun -l "$LABEL" -l pipeline-upload=pipeline-one -n "$NAMESPACE"
-              sleep 10
-              
-              cat <<EOF | oc create -f -
-              apiVersion: tekton.dev/v1
-              kind: PipelineRun
-              metadata:
-                  generateName: pipeline-run-{{ .Values.pipeline.name }}
-                  namespace: {{ $.Values.project.name }}
-                  labels:
-                    initial-pipeline-run: "true"
-                    pipeline-run: "{{ .Values.pipeline.name }}"
-              spec:
-                  pipelineRef:
-                    name: pipeline-run-{{ .Values.pipeline.name }}
-          EOF
-              
-              
-          fi
-          oc wait --for=condition=Succeeded --timeout=1h pipelinerun -l "$LABEL" -l pipeline-run=pipeline-one -n "$NAMESPACE"
+
+          oc wait --for=condition=Succeeded --timeout=1h pipelinerun -l "$LABEL" -l pipeline-upload=pipeline-one -n "$NAMESPACE"
       restartPolicy: Never
   backoffLimit: 1
 {{- end }}
