@@ -27,7 +27,7 @@ spec:
     - description: Card transaction data
       name: CARDTRANSDATA
       type: string
-      default: https://raw.githubusercontent.com/davidseve/mlops/main/ai-examples/fraud-detection/data/creditcard.csv
+      default: https://raw.githubusercontent.com/davidseve/mlops/main/ai-examples/fraud-detection/data/card_transdata.csv
     - description: Train model component
       name: TRAIN_MODEL_COMPONENT
       type: string
