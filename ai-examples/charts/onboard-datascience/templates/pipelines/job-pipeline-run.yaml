@@ -56,7 +56,7 @@ spec:
           NAMESPACE="{{ $.Values.project.name }}"
           LABEL="initial-pipeline-run=true"
           # Check if there is a pod with the specified label in the specified namespace
-          if ! oc get pods -n "$NAMESPACE" -l "$LABEL" -l pipeline-upload=pipeline-one --no-headers | grep -q '^'; then
+          if ! oc get pods -n "$NAMESPACE" -l "$LABEL" -l pipeline-upload={{ .Values.pipeline.name }} --no-headers | grep -q '^'; then
               sleep 30
               cat <<EOF | oc create -f -
               apiVersion: tekton.dev/v1
@@ -77,8 +77,8 @@ spec:
           EOF
           fi    
               
-          if ! oc get pods -n "$NAMESPACE" -l "$LABEL" -l pipeline-run=pipeline-one --no-headers | grep -q '^'; then            
-              oc wait --for=condition=Succeeded --timeout=1h pipelinerun -l "$LABEL" -l pipeline-upload=pipeline-one -n "$NAMESPACE"
+          if ! oc get pods -n "$NAMESPACE" -l "$LABEL" -l pipeline-run={{ .Values.pipeline.name }} --no-headers | grep -q '^'; then            
+              oc wait --for=condition=Succeeded --timeout=1h pipelinerun -l "$LABEL" -l pipeline-upload={{ .Values.pipeline.name }} -n "$NAMESPACE"
               sleep 10
               
               cat <<EOF | oc create -f -
@@ -97,7 +97,7 @@ spec:
               
               
           fi
-          oc wait --for=condition=Succeeded --timeout=1h pipelinerun -l "$LABEL" -l pipeline-run=pipeline-one -n "$NAMESPACE"
+          oc wait --for=condition=Succeeded --timeout=1h pipelinerun -l "$LABEL" -l pipeline-upload={{ .Values.pipeline.name }} -n "$NAMESPACE"
       restartPolicy: Never
   backoffLimit: 1
 {{- end }}

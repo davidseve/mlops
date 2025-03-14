@@ -23,6 +23,21 @@ while [[ "${status}" != "Healthy" ]]; do
   status=$(oc get application.argoproj.io $appname -n openshift-gitops -o jsonpath='{ .status.health.status }')
 done
 
+# apiVersion: tekton.dev/v1
+# kind: PipelineRun
+# metadata:
+#     generateName: pipeline-run-pipeline-one
+#     namespace: fraud
+#     labels:
+#       initial-pipeline-run: "true"
+#       pipeline-run: "pipeline-one"
+# spec:
+#     pipelineRef:
+#       name: pipeline-run-pipeline-one
+#     params:
+#       - name: MODEL_VERSION
+#         value: "2"
+
 
 if [ "$#" -gt 0 ]; then
     # The URL for the curl command
