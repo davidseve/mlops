@@ -38,7 +38,6 @@ spec:
     - image: $(params.TASK_IMAGE)
       timeout: 600s
       name: compile
-      resources: {}
       workingDir: $(workspaces.source.path)
       env:
         - name: PIPELINE_NAME
