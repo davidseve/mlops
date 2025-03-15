@@ -17,7 +17,7 @@ spec:
         - $values/bootstrap/gitops/appofapps-values.yaml  
     - ref: values
       repoURL: 'https://github.com/davidseve/mlops.git'
-      targetRevision: pipelines #TODO change to master
+      targetRevision: pipeline #TODO change to master
   syncPolicy:
     automated:
       prune: false
