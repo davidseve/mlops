@@ -19,7 +19,7 @@ spec:
     - description: Model version
       name: MODEL_VERSION
       type: string
-      default: 1 
+      default: '1' 
     - description: dataconnection secret name
       name: DATACONNECTION
       type: string
@@ -35,7 +35,6 @@ spec:
   steps:
     - image: $(params.TASK_IMAGE)
       name: compile
-      resources: {}
       script: |
         #!/bin/sh
 

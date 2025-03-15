@@ -36,9 +36,10 @@ spec:
       name: PIPELINE_ID
   steps:
     - image: $(params.TASK_IMAGE)
-      timeout: 600s
+      timeout: 10m0s
       name: compile
       workingDir: $(workspaces.source.path)
+      computeResources: {}
       env:
         - name: PIPELINE_NAME
           value: $(params.PIPELINE_NAME)

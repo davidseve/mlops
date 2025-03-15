@@ -6,12 +6,6 @@ metadata:
   namespace: {{ $.Values.project.name }}
 spec:
   params:
-    # - name: APP_NAME
-    #   type: string
-    #   default: "{{ .Values.modelDeploymentUploadTektonPipelineName }}"
-    # - name: GIT_PROVIDER
-    #   type: string
-    #   default: github
     - name: GIT_REPO
       type: string
       default: "{{ .Values.pipeline.repo }}"
@@ -23,6 +17,7 @@ spec:
       default: '{{ .Values.pipeline.gitSslVerify }}'
   tasks:
     - name: fetch-repository
+      timeout: 10m0s
       params:
         - name: URL
           value: $(params.GIT_REPO)
