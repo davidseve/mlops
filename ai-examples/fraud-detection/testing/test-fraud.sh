@@ -4,40 +4,6 @@
 appfile=../gitops/app-ai-fraud.yaml 
 appname=ai-fraud-example
 
-oc apply -f $appfile
-
-# wait until $appname is available
-status=$(oc get application.argoproj.io $appname -n openshift-gitops -o jsonpath='{ .status.resources.sync.status }')
-while [[ "${status}" != "Healthy" ]]; do
-  sleep 20;
-  echo "Wait for app Healthy 20s"
-  status=$(oc get application.argoproj.io $appname -n openshift-gitops -o jsonpath='{ .status.health.status }')
-done
-
-sleep 30
-# wait until $appname is available
-status=$(oc get application.argoproj.io $appname -n openshift-gitops -o jsonpath='{ .status.resources.sync.status }')
-while [[ "${status}" != "Healthy" ]]; do
-  sleep 10;
-  echo "Wait for app Healthy 10s"
-  status=$(oc get application.argoproj.io $appname -n openshift-gitops -o jsonpath='{ .status.health.status }')
-done
-
-# apiVersion: tekton.dev/v1
-# kind: PipelineRun
-# metadata:
-#     generateName: pipeline-run-pipeline-one
-#     namespace: fraud
-#     labels:
-#       initial-pipeline-run: "true"
-#       pipeline-run: "pipeline-one"
-# spec:
-#     pipelineRef:
-#       name: pipeline-run-pipeline-one
-#     params:
-#       - name: MODEL_VERSION
-#         value: "2"
-
 
 if [ "$#" -gt 0 ]; then
     # The URL for the curl command
