@@ -84,6 +84,15 @@ applications:
       path: bootstrap/gitops/common/ods
     destination:
       namespace: redhat-ods-operator  
+
+  model-registry:
+    project: cluster-config
+    annotations:
+      argocd.argoproj.io/sync-wave: '30'
+    source:
+      path: bootstrap/gitops/common/model-registry
+    destination:
+      namespace: rhoai-model-registries  
       
   # rbac:
   #   project: cluster-config
