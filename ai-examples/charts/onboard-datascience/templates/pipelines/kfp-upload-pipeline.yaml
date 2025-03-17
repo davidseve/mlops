@@ -1,17 +1,11 @@
 {{- if .Values.pipeline.enabled }}
-apiVersion: tekton.dev/v1beta1
+apiVersion: tekton.dev/v1
 kind: Pipeline
 metadata:
   name: pipeline-upload-{{ .Values.pipeline.name }}
   namespace: {{ $.Values.project.name }}
 spec:
   params:
-    # - name: APP_NAME
-    #   type: string
-    #   default: "{{ .Values.modelDeploymentUploadTektonPipelineName }}"
-    # - name: GIT_PROVIDER
-    #   type: string
-    #   default: github
     - name: GIT_REPO
       type: string
       default: "{{ .Values.pipeline.repo }}"
@@ -23,18 +17,23 @@ spec:
       default: '{{ .Values.pipeline.gitSslVerify }}'
   tasks:
     - name: fetch-repository
+      timeout: 10m0s
       params:
-        - name: url
+        - name: URL
           value: $(params.GIT_REPO)
-        - name: revision
+        - name: REVISION
           value: $(params.GIT_REVISION)
-        - name: deleteExisting
+        - name: DELETE_EXISTING
           value: 'true'
-        - name: sslVerify
+        - name: SSL_VERIFY
           value: $(params.GIT_SSL_VERIFY)
       taskRef:
-        kind: ClusterTask
-        name: git-clone
+        params:
+          - name: name
+            value: git-clone
+          - name: namespace
+            value: openshift-pipelines
+        resolver: cluster
       workspaces:
         - name: output
           workspace: workspace-source

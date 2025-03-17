@@ -1,5 +1,5 @@
 {{- if .Values.pipeline.enabled }}
-apiVersion: tekton.dev/v1beta1
+apiVersion: tekton.dev/v1
 kind: Task
 metadata:
   annotations:
@@ -36,10 +36,10 @@ spec:
       name: PIPELINE_ID
   steps:
     - image: $(params.TASK_IMAGE)
-      timeout: 600s
+      timeout: 10m0s
       name: compile
-      resources: {}
       workingDir: $(workspaces.source.path)
+      computeResources: {}
       env:
         - name: PIPELINE_NAME
           value: $(params.PIPELINE_NAME)

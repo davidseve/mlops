@@ -97,7 +97,7 @@ spec:
               
               
           fi
-          oc wait --for=condition=Succeeded --timeout=1h pipelinerun -l "$LABEL" -l pipeline-upload={{ .Values.pipeline.name }} -n "$NAMESPACE"
+          oc wait --for=condition=Succeeded --timeout=1h pipelinerun -l "$LABEL" -l pipeline-run={{ .Values.pipeline.name }} -n "$NAMESPACE"
       restartPolicy: Never
   backoffLimit: 1
 {{- end }}
