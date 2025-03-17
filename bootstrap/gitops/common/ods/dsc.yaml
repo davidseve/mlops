@@ -20,9 +20,6 @@ spec:
       managementState: Removed
     modelmeshserving:
       managementState: Managed
-    # modelregistry:
-    #   managementState: Managed
-    #   registriesNamespace: rhoai-model-registries
     ray:
       managementState: Removed
     workbenches:
