@@ -76,14 +76,14 @@ applications:
     destination:
       namespace: openshift-serverless
 
-  # ods:
-  #   project: cluster-config
-  #   annotations:
-  #     argocd.argoproj.io/sync-wave: '25'
-  #   source:
-  #     path: bootstrap/gitops/common/ods
-  #   destination:
-  #     namespace: redhat-ods-operator  
+  ods:
+    project: cluster-config
+    annotations:
+      argocd.argoproj.io/sync-wave: '25'
+    source:
+      path: bootstrap/gitops/common/ods
+    destination:
+      namespace: redhat-ods-operator  
 
   # model-registry:
   #   project: cluster-config
