@@ -13,7 +13,7 @@ spec:
   source: 
     path: ai-examples/charts/onboard-datascience
     repoURL: 'https://github.com/davidseve/mlops.git'
-    targetRevision: pipeline #TOODO change to main
+    targetRevision: main
     helm:
       valueFiles:
       - ../../fraud-detection/gitops/values-fraud.yaml  
