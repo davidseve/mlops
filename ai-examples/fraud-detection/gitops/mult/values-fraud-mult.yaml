@@ -6,7 +6,9 @@ project:
   name: fraud-mult
   # true if project doesn't exist now
   autocreate: true
-inferencedataconnections: dataconnection-one
+inference:
+  dataconnections: dataconnection-one
+  version: 1
 multimodel: true
 notebooks:
   - notebook-one:
