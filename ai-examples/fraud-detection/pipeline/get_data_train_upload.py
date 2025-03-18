@@ -12,7 +12,7 @@ from kfp import kubernetes
 
 from kubernetes import client, config
 
-@dsl.component(base_image="tensorflow/tensorflow   ")
+@dsl.component(base_image="tensorflow/tensorflow")
 def get_data(data_output_path: OutputPath(), card_transdata: str):
     import urllib.request
     print("starting download...")
@@ -22,7 +22,7 @@ def get_data(data_output_path: OutputPath(), card_transdata: str):
 
 
 @dsl.component(
-    base_image="tensorflow/tensorflow   ",
+    base_image="tensorflow/tensorflow",
     packages_to_install=["boto3", "botocore"]
 )
 def upload_model(input_model_path: InputPath(), s3_key: str):

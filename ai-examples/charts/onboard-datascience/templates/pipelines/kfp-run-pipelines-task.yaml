@@ -15,7 +15,7 @@ spec:
     - description: The image used where python is installed
       name: TASK_IMAGE
       type: string
-      default: tensorflow/tensorflow       
+      default: tensorflow/tensorflow 
     - description: Model version
       name: MODEL_VERSION
       type: string

@@ -18,7 +18,7 @@ spec:
     - description: The image used where python is installed
       name: TASK_IMAGE
       type: string
-      default: tensorflow/tensorflow   
+      default: tensorflow/tensorflow
     - description: The pipeline python script to compile
       name: PIPELINE_NAME
       type: string

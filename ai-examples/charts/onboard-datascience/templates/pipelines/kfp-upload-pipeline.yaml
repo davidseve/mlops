@@ -42,7 +42,7 @@ spec:
         - fetch-repository
       params:
         - name: TASK_IMAGE
-          value: tensorflow/tensorflow   
+          value: tensorflow/tensorflow
         - name: PYTHON_PIPELINE_NAME
           value: {{ .Values.pipeline.pythonPipelineName }}
         - name: REQUIREMENTS_FILE
