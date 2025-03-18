@@ -59,7 +59,7 @@ pipeline:
       scheme: http
   #Tekton pipeline
   repo: https://github.com/davidseve/mlops.git
-  revision: pipeline #TOODO change to main
+  revision: main
   gitSslVerify: true
   pipelinePath: ai-examples/fraud-detection/pipeline
   pythonPipelineName: get_data_train_upload.py
