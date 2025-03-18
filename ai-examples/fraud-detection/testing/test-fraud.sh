@@ -91,13 +91,17 @@ NAMESPACE="fraud"
 PIPELINE_RUN_NAME="pipeline-run-pipeline-one"
 MODEL_VERSION="2"
 
-tkn pipeline start $PIPELINE_RUN_NAME --param MODEL_VERSION=$MODEL_VERSION -n $NAMESPACE --showlog
+tkn pipeline start $PIPELINE_RUN_NAME --param MODEL_VERSION=$MODEL_VERSION --param CARDTRANSDATA=https://raw.githubusercontent.com/davidseve/mlops/main/ai-examples/fraud-detection/data/card_transdata.csv-n $NAMESPACE --showlog
 
 sed -i 's/version: 1/version: 2/' ai-examples/fraud-detection/gitops/values-fraud.yaml
 
 git add ai-examples/fraud-detection/gitops/values-fraud.yaml
 git commit -m "Change model version to v2"
 git push origin $appname
+
+argocd sync app $appname
+
+sleep 1
 
 testAPI $1
 

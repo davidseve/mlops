@@ -24,3 +24,7 @@ while true; do
         sleep 2
     fi
 done
+
+git checkout main
+git branch -d $appname
+git push origin --delete $appname

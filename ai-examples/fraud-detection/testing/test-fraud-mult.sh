@@ -4,6 +4,21 @@
 appfile=../gitops/mult/app-ai-fraud-mult.yaml 
 appname=ai-fraud-example-mult
 
+rm -rf /tmp/$appfile
+mkdir /tmp/$appfile
+cd /tmp/$appfile
+
+git clone https://github.com/davidseve/mlops.git
+cd mlops
+
+if [ ${1:-no} != "no" ]
+then
+    git fetch
+    git switch $1
+fi
+git checkout -b $appfile
+git push origin $appfile
+
 oc apply -f $appfile
 
 # wait until $appname is available
