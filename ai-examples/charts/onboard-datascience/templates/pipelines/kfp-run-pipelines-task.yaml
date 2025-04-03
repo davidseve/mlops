@@ -108,7 +108,7 @@ spec:
             if not kfp_endpoint.startswith("http"):
                 kfp_endpoint = f"https://{kfp_endpoint}"
 
-            client = kfp.Client(host=kfp_endpoint, existing_token=token, ssl_ca_cert="/var/run/secrets/kubernetes.io/serviceaccount/ca.crt",)
+            client = kfp.Client(host=kfp_endpoint, existing_token=token)
 
             # List pipelines
             pipelines = client.list_pipelines()
