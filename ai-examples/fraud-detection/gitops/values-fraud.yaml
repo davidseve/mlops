@@ -9,7 +9,7 @@ project:
   autocreate: true
 inference:
   dataconnections: dataconnection-one
-  version: 1
+  version: 2
 multimodel: false
 notebooks:
   - notebook-one:
