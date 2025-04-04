@@ -1,17 +1,19 @@
 
 #!/bin/bash
 
+clusterdomain=$(oc get dns.config/cluster -o jsonpath='{.spec.baseDomain}')
+
 testAPI(){
     if [ "$#" -gt 0 ]; then
         # The URL for the curl command
-        url="https://fraudinference-fraud.apps.$1/v2/models/fraudinference/versions/1/infer" 
+        url="https://fraudinference-fraud.apps.$clusterdomain/v2/models/fraudinference/versions/1/infer" 
 
         # Retry interval in seconds
         retry_interval=5
 
         while true; do
             # Perform the curl command and capture the response and HTTP status code
-            response=$(curl -k -s -w "%{http_code}" -o response_body.txt -X POST "$url" -H "Content-Type: application/json" -d "$2" )
+            response=$(curl -k -s -w "%{http_code}" -o response_body.txt -X POST "$url" -H "Content-Type: application/json" -d "$1" )
             http_code="${response: -3}"
             
             # Check if the HTTP status code is 200 and the response body matches the expected response
@@ -39,7 +41,7 @@ rm -rf /tmp/$appname
 mkdir /tmp/$appname
 cd /tmp/$appname
 
-git clone https://github.com/davidseve/mlops.git
+git clone git@github.com:davidseve/mlops.git
 cd mlops
 
 if [ ${2:-no} != "no" ]
@@ -81,7 +83,7 @@ data='{
                             }
                         ]
                 }'
-testAPI $1 "$data"
+testAPI "$data"
 
 # Define variables
 NAMESPACE="fraud"
@@ -112,7 +114,7 @@ data='{
                             }
                         ]
                 }'
-testAPI $1 "$data"
+testAPI "$data"
 
 # Not fraud
 data='{
@@ -126,5 +128,5 @@ data='{
                             }
                         ]
                 }'
-testAPI $1 "$data"
+testAPI "$data"
          
