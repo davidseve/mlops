@@ -1,0 +1,97 @@
+---
+# curl -L -X POST 'https://el-pipeline-run-fraud.apps.ocp.sandbox342.opentlc.com'--data '{}'
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: el-pipeline-run
+  namespace: {{ $.Values.project.name }}
+  labels:
+    app.kubernetes.io/managed-by: EventListener
+    app.kubernetes.io/part-of: Triggers
+spec:
+  to:
+    kind: Service
+    name: el-pipeline-run
+    weight: 100
+  port:
+    targetPort: http-listener
+  wildcardPolicy: None
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect
+---
+apiVersion: triggers.tekton.dev/v1beta1
+kind: EventListener
+metadata:
+  name: pipeline-run
+  namespace: {{ $.Values.project.name }}
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  serviceAccountName: pipeline
+  triggers:
+    - triggerRef: pipeline-run
+---
+apiVersion: triggers.tekton.dev/v1beta1 
+kind: Trigger 
+metadata:
+  name: pipeline-run
+  namespace: {{ $.Values.project.name }}
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  serviceAccountName: pipeline 
+  interceptors:
+    - ref:
+        name: cel
+      params:
+      - name: filter
+        # execute only when a file within the ai-examples/fraud-detection/data/card_transdata.csv directory has changed
+        value: >
+          body.commits.exists(c,
+            c.added.exists(f, f.startsWith('ai-examples/fraud-detection/data/card_transdata.csv')) ||
+            c.modified.exists(f, f.startsWith('ai-examples/fraud-detection/data/card_transdata.csv')) ||
+            c.removed.exists(f, f.startsWith('ai-examples/fraud-detection/data/card_transdata.csv'))
+          )
+  bindings:
+    - ref: pipeline-run-binding
+  template: 
+    ref: pipeline-run-template
+---
+apiVersion: triggers.tekton.dev/v1beta1
+kind: TriggerBinding
+metadata:
+  name: pipeline-run-binding
+  namespace: {{ $.Values.project.name }}
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  params:
+    - name: body
+      value: $(body)
+    - name: header
+      value: $(header)
+---
+apiVersion: triggers.tekton.dev/v1beta1
+kind: TriggerTemplate
+metadata:
+  name: pipeline-run-template
+  namespace: {{ $.Values.project.name }}
+  annotations:
+    triggers.tekton.dev/old-escape-quotes: "true"
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  resourcetemplates:
+    - apiVersion: tekton.dev/v1
+      kind: PipelineRun
+      metadata:
+        generateName: pipeline-run-{{ .Values.pipeline.name }}
+        namespace: {{ $.Values.project.name }}
+        labels:
+          pipeline-run: "{{ .Values.pipeline.name }}"
+      spec:
+        pipelineRef:
+          name: pipeline-run-{{ .Values.pipeline.name }}
+        params:
+        - name: CARDTRANSDATA
+          value: "https://raw.githubusercontent.com/davidseve/mlops/main/ai-examples/fraud-detection/data/card_transdata.csv"

@@ -73,3 +73,70 @@ In terms of safety, this is the most interesting part. The data connections curr
 ```
 
 ## Model serving
+
+
+
+
+## Running the Pipelines with the Trigger
+
+### Executing the Pipeline upload
+
+```bash
+CLUSTER_DOMAIN=$(oc get dns.config/cluster -o jsonpath='{.spec.baseDomain}')
+```
+
+```bash
+curl -L -X POST "https://el-pipeline-upload-fraud.apps.$CLUSTER_DOMAIN" \
+-H 'Content-Type: application/json' \
+--data '{
+  "commits": [
+    {
+      "id": "abc123",
+      "message": "Example commit message",
+      "timestamp": "2025-04-04T12:00:00Z",
+      "url": "https://github.com/user/repo/commit/abc123",
+      "added": ["file1.txt"],
+      "modified": ["ai-examples/fraud-detection/pipeline/file2.txt"],
+      "removed": ["file3.txt"]
+    }
+  ],
+  "repository": {
+    "id": 123456,
+    "name": "example-repo",
+    "full_name": "user/example-repo"
+  },
+  "pusher": {
+    "name": "username",
+    "email": "user@example.com"
+  }
+}'
+```
+
+### Executing the Pipeline run
+
+```bash
+curl -L -X POST "https://el-pipeline-run-fraud.apps.$CLUSTER_DOMAIN" \
+-H 'Content-Type: application/json' \
+--data '{
+  "commits": [
+    {
+      "id": "abc123",
+      "message": "Example commit message",
+      "timestamp": "2025-04-04T12:00:00Z",
+      "url": "https://github.com/user/repo/commit/abc123",
+      "added": ["file1.txt"],
+      "modified": ["ai-examples/fraud-detection/data/card_transdata.csv"],
+      "removed": ["file3.txt"]
+    }
+  ],
+  "repository": {
+    "id": 123456,
+    "name": "example-repo",
+    "full_name": "user/example-repo"
+  },
+  "pusher": {
+    "name": "username",
+    "email": "user@example.com"
+  }
+}'
+```
